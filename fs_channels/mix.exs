@@ -7,7 +7,12 @@ defmodule FsChannels.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+
+     # hex
+     description: description,
+     package: package,
+    ]
   end
 
   # Configuration for the OTP application
@@ -28,6 +33,14 @@ defmodule FsChannels.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:sqlitex, "~> 1.0.0"}]
+  end
+
+  defp description, do: "Collect and push channels information from FreeSWITCH Sqlite to InfluxDB"
+
+  defp package do
+    [maintainers: ["Areski Belaid"],
+      licenses: ["MIT"],
+      links: %{"Github" => "https://github.com/areski/fs_channels_influxdb"}]
   end
 end

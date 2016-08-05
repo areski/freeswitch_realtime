@@ -10,6 +10,9 @@ defmodule FsChannels do
     children = [
       # Starts a worker by calling: FsChannels.Worker.start_link(arg1, arg2, arg3)
       # worker(FsChannels.Worker, [arg1, arg2, arg3]),
+      worker(Collector, [[], [name: MyCollector]]),
+      worker(Sqlitex.Server, ['/tmp2/golf.sqlite3', [name: Sqlitex.Server]]),
+      # worker(Sqlitex.Server, [Application.fetch_env!(:fs_channels, :sqlite_db), [name: Sqlitex.Server]]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
