@@ -29,6 +29,33 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
+# tell logger to load a LoggerFileBackend processes
+config :logger,
+  backends: [{LoggerFileBackend, :error_log},
+             {LoggerFileBackend, :debug_log}]
+
+# configuration for the {LoggerFileBackend, :error_log} backend
+config :logger, :error_log,
+  path: "/tmp/elixir-error.log",
+  level: :error,
+  format: "\n$time $metadata[$level] $levelpad$message\n"
+  # metadata: [:file, :line]
+
+# configuration for the {LoggerFileBackend, :debug_log} backend
+config :logger, :debug_log,
+  path: "/tmp/elixir-debug.log",
+  level: :debug,
+  format: "\n$time $metadata[$level] $levelpad$message\n"
+  # metadata: [:file, :line]
+
+
+# config :logger,
+#   backends: [:console],
+#   compile_time_purge_level: :debug
+
+# config :logger, :console,
+#   format: "\n$time $metadata[$level] $levelpad$message\n"
+
 config :fs_channels,
   sqlite_db: "/dev/shm/core.db"
 

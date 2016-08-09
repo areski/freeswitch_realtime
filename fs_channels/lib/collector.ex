@@ -1,13 +1,14 @@
 defmodule Collector do
   use GenServer
+  require Logger
 
   def start_link(state, opts \\ []) do
     GenServer.start_link(__MODULE__, state, opts)
   end
 
   def init(state) do
-    IO.puts "[Collector.init]"
-    IO.puts "we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
+    Logger.debug "[Collector.init]"
+    Logger.debug "we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     {:ok, state}
   end
@@ -20,9 +21,12 @@ defmodule Collector do
 
   defp schedule_task() do
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
-    IO.inspect :os.timestamp |> :calendar.now_to_datetime
+    current_date = :os.timestamp |> :calendar.now_to_datetime
+    #{inspect reason}
+    Logger.debug "#{inspect current_date}"
     # IO.inspect get_channels_aggr()
-    IO.inspect get_channels_count()
+    cnt = get_channels_count()
+    Logger.info "#{inspect cnt}"
   end
 
   def handle_call(:pop, _from, []) do
@@ -55,12 +59,11 @@ defmodule Collector do
   # end
 
   defp get_channels_count() do
-    IO.puts "Hello"
     case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
       {:ok, db} ->
         Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
       {:error, reason} ->
-        IO.inspect reason
+        Logger.error #{inspect reason}
         []
     end
     # IO.inspect conn

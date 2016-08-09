@@ -33,7 +33,8 @@ defmodule FsChannels.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:sqlitex, "~> 1.0.0"}]
+    [{:sqlitex, "~> 1.0.0"},
+     {:logger_file_backend, "0.0.7"}]
   end
 
   defp description, do: "Collect and push channels information from FreeSWITCH Sqlite to InfluxDB"
