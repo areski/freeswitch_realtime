@@ -8,7 +8,6 @@ defmodule Collector do
   def init(state) do
     IO.puts "[Collector.init]"
     IO.puts "we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
-    # schedule_task()
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     {:ok, state}
   end
@@ -39,14 +38,35 @@ defmodule Collector do
     {:noreply, [h | t]}
   end
 
-  defp get_channels_aggr() do
-    Sqlitex.Server.query(Sqlitex.Server,
-                     "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-  end
+  # defp get_channels_aggr() do
+  #   Sqlitex.Server.query(Sqlitex.Server,
+  #                    "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+  # end
+
+  # defp get_channels_aggr() do
+  #   Sqlitex.with_db(Application.fetch_env!(:fs_channels, :sqlite_db), fn(db) ->
+  #     Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+  #   end)
+  # end
+
+  # defp get_channels_count() do
+  #   Sqlitex.Server.query(Sqlitex.Server,
+  #                    "SELECT count(*) as count FROM channels;")
+  # end
 
   defp get_channels_count() do
-    Sqlitex.Server.query(Sqlitex.Server,
-                     "SELECT count(*) as count FROM channels;")
+    IO.puts "Hello"
+    case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+      {:ok, db} ->
+        Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+      {:error, reason} ->
+        IO.inspect reason
+        []
+    end
+    # IO.inspect conn
+    # Sqlitex.with_db(Application.fetch_env!(:fs_channels, :sqlite_db), fn(db) ->
+    #   Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+    # end)
   end
 
 end
