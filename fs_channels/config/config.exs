@@ -38,14 +38,14 @@ config :logger,
 config :logger, :error_log,
   path: "/tmp/elixir-error.log",
   level: :error,
-  format: "\n$time $metadata[$level] $levelpad$message\n"
+  format: "$time $metadata[$level] $levelpad$message\n"
   # metadata: [:file, :line]
 
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
   path: "/tmp/elixir-debug.log",
   level: :debug,
-  format: "\n$time $metadata[$level] $levelpad$message\n"
+  format: "$time $metadata[$level] $levelpad$message\n"
   # metadata: [:file, :line]
 
 
@@ -57,7 +57,19 @@ config :logger, :debug_log,
 #   format: "\n$time $metadata[$level] $levelpad$message\n"
 
 config :fs_channels,
-  sqlite_db: "/dev/shm/core.db"
+  sqlite_db: "/dev/shm/core.db",
+  # influxdatabase:  "newfiesdialer",
+  influxdatabase:  "newfiesdialer"
+
+# InfluxDB configuration
+config :influxcon_app, FsChannels.InConnection,
+  host:      "localhost",
+  # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
+  pool:      [ max_overflow: 0, size: 1 ],
+  port:      8086,
+  scheme:    "http",
+  writer:    Instream.Writer.Line
+
 
 if File.regular?("./config/private.exs") do
   import_config "private.exs"

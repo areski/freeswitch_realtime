@@ -13,11 +13,13 @@ defmodule FsChannels do
       worker(Collector, [[], [name: MyCollector]]),
       # We dont use `Sqlitex.Server` as it's not possible to catch errors on reading/opening the database
       # worker(Sqlitex.Server, [Application.fetch_env!(:fs_channels, :sqlite_db), [name: Sqlitex.Server]]),
+      FsChannels.InConnection.child_spec,
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, max_restarts: 10, name: FsChannels.Supervisor]
     Supervisor.start_link(children, opts)
+
   end
 end

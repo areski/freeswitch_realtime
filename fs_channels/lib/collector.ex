@@ -7,8 +7,7 @@ defmodule Collector do
   end
 
   def init(state) do
-    Logger.debug "[Collector.init]"
-    Logger.debug "we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
+    Logger.debug "[init] we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     {:ok, state}
   end
@@ -47,18 +46,17 @@ defmodule Collector do
   #                    "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
   # end
 
-  # defp get_channels_aggr() do
-  #   Sqlitex.with_db(Application.fetch_env!(:fs_channels, :sqlite_db), fn(db) ->
-  #     Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-  #   end)
-  # end
-
-  # defp get_channels_count() do
-  #   Sqlitex.Server.query(Sqlitex.Server,
-  #                    "SELECT count(*) as count FROM channels;")
-  # end
-
   defp get_channels_count() do
+    case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+      {:ok, db} ->
+        Sqlitex.query(db, "SELECT count(*) FROM channels;")
+      {:error, reason} ->
+        Logger.error #{inspect reason}
+        []
+    end
+  end
+
+  defp get_channels_aggr() do
     case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
       {:ok, db} ->
         Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
@@ -66,10 +64,6 @@ defmodule Collector do
         Logger.error #{inspect reason}
         []
     end
-    # IO.inspect conn
-    # Sqlitex.with_db(Application.fetch_env!(:fs_channels, :sqlite_db), fn(db) ->
-    #   Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-    # end)
   end
 
 end
