@@ -1,4 +1,5 @@
-# FreeSWITCH channels Influxdb
+# FreeSWITCH channels Influxdb [![Build Status](https://travis-ci.org/areski/fs_channels_influxdb.svg?branch=master)](https://travis-ci.org/areski/fs_channels_influxdb)
+
 
 Collect and push channels information from FreeSWITCH Sqlite to InfluxDB
 
