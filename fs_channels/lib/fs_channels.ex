@@ -11,6 +11,8 @@ defmodule FsChannels do
       # Starts a worker by calling: FsChannels.Worker.start_link(arg1, arg2, arg3)
       # worker(FsChannels.Worker, [arg1, arg2, arg3]),
       worker(Collector, [[], [name: MyCollector]]),
+      # worker(Pusher, [[], [name: MyPusher]]),
+      worker(Pusher, [0]),
       # We dont use `Sqlitex.Server` as it's not possible to catch errors on reading/opening the database
       # worker(Sqlitex.Server, [Application.fetch_env!(:fs_channels, :sqlite_db), [name: Sqlitex.Server]]),
       FsChannels.InConnection.child_spec,

@@ -21,30 +21,20 @@ defmodule Collector do
   defp schedule_task() do
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     current_date = :os.timestamp |> :calendar.now_to_datetime
-    #{inspect reason}
     Logger.debug "#{inspect current_date}"
-    # IO.inspect get_channels_aggr()
-    cnt = get_channels_count()
-    Logger.info "#{inspect cnt}"
+
+    # Dispatch Task
+    task_read_channels()
   end
 
-  def handle_call(:pop, _from, []) do
-    raise "oops it's empty"
-    {:reply, [], []}
-  end
+  defp task_read_channels() do
+    aggr_channel = get_channels_aggr()
+    # IO.inspect aggr_channel
+    Pusher.push_aggr_channel(aggr_channel)
 
-  def handle_call(:pop, _from, [h | t]) do
-    {:reply, h, t}
+    # cnt = get_channels_count()
+    # Logger.info "#{inspect cnt}"
   end
-
-  def handle_cast({:push, h}, t) do
-    {:noreply, [h | t]}
-  end
-
-  # defp get_channels_aggr() do
-  #   Sqlitex.Server.query(Sqlitex.Server,
-  #                    "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-  # end
 
   defp get_channels_count() do
     case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
@@ -65,5 +55,10 @@ defmodule Collector do
         []
     end
   end
+
+  # defp get_channels_aggr() do
+  #   Sqlitex.Server.query(Sqlitex.Server,
+  #                    "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+  # end
 
 end

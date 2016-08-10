@@ -6,9 +6,9 @@ defmodule ChannelSeries do
     measurement "channels"
 
     tag :host, default: "127.0.0.1"
-    tag :campaign_id
-    tag :user_id
-    tag :used_gateway_id
+    tag :campaign_id, default: 0
+    tag :user_id, default: 0
+    tag :used_gateway_id, default: 0
 
     field :value, default: 0
   end
