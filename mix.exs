@@ -19,7 +19,7 @@ defmodule FsChannels.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :instream],
+    [applications: [:logger, :exrm_deb, :swab, :sqlitex, :instream, :logger_file_backend, :exrm_deb],
      mod: {FsChannels, []}]
   end
 
@@ -33,12 +33,15 @@ defmodule FsChannels.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ex_doc, "~> 0.13.0", only: :dev},
+    [
+     {:ex_doc, "~> 0.13.0", only: :dev},
      {:exrm, "~> 1.0.8"},
      {:exrm_deb, "~> 0.0.6"},
      {:sqlitex, "~> 1.0.0"},
      {:logger_file_backend, "0.0.7"},
-     {:instream, "~> 0.12"}]
+     {:instream, "~> 0.12"},
+     {:swab, github: "crownedgrouse/swab", branch: "master"}
+    ]
   end
 
   defp description, do: "Collect and push channels information from FreeSWITCH Sqlite to InfluxDB"
