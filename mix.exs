@@ -19,7 +19,7 @@ defmodule FsChannels.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :exrm_deb, :swab, :sqlitex, :instream, :logger_file_backend, :exrm_deb],
+    [applications: [:logger, :exrm, :swab, :sqlitex, :instream, :logger_file_backend, :exrm_deb],
      mod: {FsChannels, []}]
   end
 

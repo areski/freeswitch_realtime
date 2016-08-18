@@ -29,16 +29,43 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
+# tell logger to load a LoggerFileBackend processes
+config :logger,
+  backends: [{LoggerFileBackend, :error_log},
+             {LoggerFileBackend, :debug_log}]
+
+# configuration for the {LoggerFileBackend, :error_log} backend
+config :logger, :error_log,
+  path: "/tmp/elixir-error.log",
+  level: :error,
+  format: "$time $metadata[$level] $levelpad$message\n"
+  # metadata: [:file, :line]
+
+# configuration for the {LoggerFileBackend, :debug_log} backend
+config :logger, :debug_log,
+  path: "/tmp/elixir-debug.log",
+  level: :debug,
+  format: "$time $metadata[$level] $levelpad$message\n"
+  # metadata: [:file, :line]
+
+
+# config :logger,
+#   backends: [:console],
+#   compile_time_purge_level: :debug
+
+# config :logger, :console,
+#   format: "\n$time $metadata[$level] $levelpad$message\n"
+
 config :fs_channels,
-  sqlite_db: "/home/areski/private/bitbucket/newfies-dialer/playground/channels/coredb.sqlite",
-  # sqlite_db: "/bam/coredb.sqlite",
+  sqlite_db: "/dev/shm/core.db",
+  # influxdatabase:  "newfiesdialer",
   influxdatabase:  "newfiesdialer"
 
+# InfluxDB configuration
 config :influxcon_app, FsChannels.InConnection,
-  host:      "162.243.160.14",
+  host:      "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],
   port:      8086,
   scheme:    "http",
   writer:    Instream.Writer.Line
-

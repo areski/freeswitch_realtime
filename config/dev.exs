@@ -57,7 +57,7 @@ config :logger, :debug_log,
 #   format: "\n$time $metadata[$level] $levelpad$message\n"
 
 config :fs_channels,
-  sqlite_db: "/dev/shm/core.db",
+  sqlite_db: "/home/areski/private/bitbucket/newfies-dialer/playground/channels/coredb.sqlite",
   # influxdatabase:  "newfiesdialer",
   influxdatabase:  "newfiesdialer"
 
@@ -69,8 +69,3 @@ config :influxcon_app, FsChannels.InConnection,
   port:      8086,
   scheme:    "http",
   writer:    Instream.Writer.Line
-
-
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
