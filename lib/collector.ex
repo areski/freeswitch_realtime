@@ -20,11 +20,10 @@ defmodule Collector do
 
   defp schedule_task() do
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
-    current_date = :os.timestamp |> :calendar.now_to_datetime
-    Logger.debug "#{inspect current_date}"
-
     # Dispatch Task
     task_read_channels()
+    # current_date = :os.timestamp |> :calendar.now_to_datetime
+    # Logger.debug "#{inspect current_date}"
   end
 
   defp task_read_channels() do
