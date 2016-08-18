@@ -23,4 +23,10 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     end
     ```
 
+  3. Add host in your `/etc/hosts`,eg:
+
+    ```127.0.0.1     influxdb_host
+    ```
+
+
 **TODO: Add description**

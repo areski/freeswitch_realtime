@@ -63,7 +63,7 @@ config :fs_channels,
 
 # InfluxDB configuration
 config :influxcon_app, FsChannels.InConnection,
-  host:      "localhost",
+  host:      "influxdb_host",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],
   port:      8086,

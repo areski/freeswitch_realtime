@@ -1,0 +1,9 @@
+DROP MEASUREMENT channels
+DROP SERIES FROM channels
+
+SHOW MEASUREMENTS
+SHOW SERIES
+
+# https://docs.influxdata.com/influxdb/v0.13/concepts/key_concepts/
+# Tags are made up of tag keys and tag values.
+# Both tag keys and tag values are stored as strings and record metadata

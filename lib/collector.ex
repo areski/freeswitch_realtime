@@ -29,8 +29,14 @@ defmodule Collector do
 
   defp task_read_channels() do
     aggr_channel = get_channels_aggr()
-    # IO.inspect aggr_channel
-    Pusher.push_aggr_channel(aggr_channel)
+    case aggr_channel do
+      {:error, {:sqlite_error, reason}} ->
+        Logger.error reason
+      {:ok, []} ->
+        Logger.info "aggregate channels is empty []"
+      {:ok, _} ->
+        Pusher.push_aggr_channel(aggr_channel)
+    end
 
     # cnt = get_channels_count()
     # Logger.info "#{inspect cnt}"
@@ -42,7 +48,7 @@ defmodule Collector do
         Sqlitex.query(db, "SELECT count(*) FROM channels;")
       {:error, reason} ->
         Logger.error #{inspect reason}
-        []
+        {:error}
     end
   end
 
@@ -51,8 +57,8 @@ defmodule Collector do
       {:ok, db} ->
         Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
       {:error, reason} ->
-        Logger.error #{inspect reason}
-        []
+        Logger.error reason
+        {:error}
     end
   end
 

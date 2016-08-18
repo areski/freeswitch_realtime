@@ -11,9 +11,12 @@ defmodule Pusher do
     case result do
       {:ok, chan_result} ->
         series = Enum.map(chan_result, fn(x) -> parse_channels x end)
-        case series |> FsChannels.InConnection.write() do
+        # IO.inspect series
+        case series |> FsChannels.InConnection.write([async: true, precision: :seconds]) do
           :ok ->
             Logger.info "wrote " <> (Enum.count(series) |> Integer.to_string) <> " points"
+          {:error, :econnrefused} ->
+            Logger.error "error writing points"
           _  ->
             Logger.error "error writing points"
             Logger.error "#{inspect series}"
