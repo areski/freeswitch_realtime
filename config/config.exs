@@ -36,14 +36,14 @@ config :logger,
 
 # configuration for the {LoggerFileBackend, :error_log} backend
 config :logger, :error_log,
-  path: "/tmp/elixir-error.log",
+  path: "/var/log/fs_channels/elixir-error.log",
   level: :error,
   format: "$time $metadata[$level] $levelpad$message\n"
   # metadata: [:file, :line]
 
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
-  path: "/tmp/elixir-debug.log",
+  path: "/var/log/fs_channels/elixir-debug.log",
   level: :debug,
   format: "$time $metadata[$level] $levelpad$message\n"
   # metadata: [:file, :line]
