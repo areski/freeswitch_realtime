@@ -41,29 +41,35 @@ defmodule Collector do
     # Logger.info "#{inspect cnt}"
   end
 
-  defp get_channels_count() do
-    case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
-      {:ok, db} ->
-        Sqlitex.query(db, "SELECT count(*) FROM channels;")
-      {:error, reason} ->
-        Logger.error #{inspect reason}
-        {:error}
-    end
-  end
-
   defp get_channels_aggr() do
     case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
       {:ok, db} ->
-        Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+        # Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+        Sqlitex.query(db, "SELECT count(*) as count, campaign_id FROM channels GROUP BY campaign_id;")
       {:error, reason} ->
         Logger.error reason
         {:error}
     end
   end
 
-  # defp get_channels_aggr() do
-  #   Sqlitex.Server.query(Sqlitex.Server,
-  #                    "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+  # defp get_channels_aggr_user() do
+  #   case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+  #     {:ok, db} ->
+  #       Sqlitex.query(db, "SELECT count(*) as count, user_id FROM channels GROUP BY user_id;")
+  #     {:error, reason} ->
+  #       Logger.error #{inspect reason}
+  #       {:error}
+  #   end
+  # end
+
+  # defp get_channels_aggr_total() do
+  #   case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+  #     {:ok, db} ->
+  #       Sqlitex.query(db, "SELECT count(*) as count FROM channels;")
+  #     {:error, reason} ->
+  #       Logger.error #{inspect reason}
+  #       {:error}
+  #   end
   # end
 
 end

@@ -7,11 +7,10 @@ Channels information are pushed in the form of:
 
   ```
   %ChannelSeries{fields: %ChannelSeries.Fields{value: 1},
-  tags: %ChannelSeries.Tags{campaign_id: 1, host: "127.0.0.1",
-   used_gateway_id: 2, user_id: 3}, timestamp: nil}
+  tags: %ChannelSeries.Tags{campaign_id: 1, host: "127.0.0.1"}, timestamp: nil}
   ```
 
-If you wish to use this with an other project you might want to remove `campaign_id`, `used_gateway_id` and `user_id` which are specific to [Newfies-Dialer](https://www.newfies-dialer.org/).
+If you wish to use this with an other project you might want to remove `campaign_id` which is specific to [Newfies-Dialer](https://www.newfies-dialer.org/).
 
 
 ## Installation
