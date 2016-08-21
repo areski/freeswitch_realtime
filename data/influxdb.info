@@ -7,3 +7,15 @@ SHOW SERIES
 # https://docs.influxdata.com/influxdb/v0.13/concepts/key_concepts/
 # Tags are made up of tag keys and tag values.
 # Both tag keys and tag values are stored as strings and record metadata
+
+> show series
+key
+freeswitch_channels_cpg_total,campaign_id=1,host=127.0.0.1
+freeswitch_channels_cpg_total,campaign_id=2,host=127.0.0.1
+freeswitch_channels_cpg_total,campaign_id=3,host=127.0.0.1
+freeswitch_channels_total,host=127.0.0.1
+
+# Queries
+
+SELECT MAX(value) FROM freeswitch_channels_total WHERE time < now() and time > now() - 10h GROUP BY time(30m) fill(0)
+s

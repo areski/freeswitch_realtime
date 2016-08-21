@@ -42,10 +42,8 @@ defmodule Pusher do
 
   def write_total(chan_result) do
     total = Enum.reduce(chan_result, 0, fn(x, acc) -> (x[:count]) end)
-
     serie = %FSChannelsSeries{}
     serie = %{ serie | fields: %{ serie.fields | value: total }}
-    IO.inspect serie
 
     case serie |> FsChannels.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
