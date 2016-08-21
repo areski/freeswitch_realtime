@@ -1,4 +1,4 @@
-# Collector FreeSWITCH channels to Influxdb [![Build Status](https://travis-ci.org/areski/fs_channels_influxdb.svg?branch=master)](https://travis-ci.org/areski/fs_channels_influxdb)
+# Collect & Push FreeSWITCH channels to Influxdb [![Build Status](https://travis-ci.org/areski/fs_channels_influxdb.svg?branch=master)](https://travis-ci.org/areski/fs_channels_influxdb)
 
 
 Collect and push channels information from [FreeSWITCH](https://freeswitch.org/) Sqlite CoreDB to [InfluxDB](https://influxdata.com/).
@@ -49,11 +49,12 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
   Add fs_channels to `systemd` on Debian 8.x:
 
+  ```
   cp fs_channels.service /lib/systemd/system/fs_channels.service
   systemctl enable fs_channels.service
   systemctl daemon-reload
   systemctl restart fs_channels.service
-
+  ```
 
 ## Todo
 
@@ -62,4 +63,3 @@ List of improvements and tasks,
 - [ ] use [conform](https://github.com/bitwalker/conform) to support config file
 - [ ] install script to quickly deploy
 - [ ] push to PostgreSQL
-- [ ] settings to remove
