@@ -3,7 +3,7 @@ defmodule FsChannels.Mixfile do
 
   def project do
     [app: :fs_channels,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -36,7 +36,7 @@ defmodule FsChannels.Mixfile do
     [
      {:ex_doc, "~> 0.13.0", only: :dev},
      {:exrm, "~> 1.0.8"},
-     {:exrm_deb, "~> 0.0.6"},
+     {:exrm_deb, "~> 0.0.7"},
      {:sqlitex, "~> 1.0.0"},
      {:logger_file_backend, "0.0.7"},
      {:instream, "~> 0.12"},
