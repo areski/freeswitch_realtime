@@ -20,8 +20,14 @@ defmodule Collector do
 
   defp schedule_task() do
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
-    # Dispatch Task
-    task_read_channels()
+
+    if File.regular?(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+      # Dispatch Task
+      task_read_channels()
+    else
+      Logger.error "sqlite database not found: " <> Application.fetch_env!(:fs_channels, :sqlite_db)
+    end
+
     # current_date = :os.timestamp |> :calendar.now_to_datetime
     # Logger.debug "#{inspect current_date}"
   end
