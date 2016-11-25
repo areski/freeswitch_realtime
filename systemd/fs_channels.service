@@ -1,7 +1,8 @@
 [Unit]
 Description=Collect and push channels information from FreeSWITCH Sqlite CoreDB to InfluxDB
 Documentation=https://github.com/areski/fs_channels_influxdb
-After=network.target influxd.service freeswitch.service
+After=network.target
+#After=network.target influxd.service freeswitch.service
 
 [Service]
 Type=forking
