@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :fs_channels, key: :value
+#     config :freeswitch_realtime, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:fs_channels, :key)
+#     Application.get_env(:freeswitch_realtime, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -56,13 +56,13 @@ config :logger, :debug_log,
 # config :logger, :console,
 #   format: "\n$time $metadata[$level] $levelpad$message\n"
 
-config :fs_channels,
+config :freeswitch_realtime,
   sqlite_db: "/dev/shm/core.db",
   # influxdatabase:  "newfiesdialer",
   influxdatabase:  "newfiesdialer"
 
 # InfluxDB configuration
-config :influxcon_app, FsChannels.InConnection,
+config :influxcon_app, FreeswitchRealtime.InConnection,
   host:      "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],

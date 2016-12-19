@@ -18,7 +18,7 @@ defmodule Pusher do
   def write_points(chan_result) do
     series = Enum.map(chan_result, fn(x) -> parse_channels x end)
     # IO.inspect series
-    case series |> FsChannels.InConnection.write([async: true, precision: :seconds]) do
+    case series |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         Logger.info "wrote " <> (Enum.count(series) |> Integer.to_string) <> " points"
       {:error, :econnrefused} ->
@@ -30,7 +30,7 @@ defmodule Pusher do
     # data = %FSChannelsCampaignSeries{}
     # data = %{ data | tags: %{ data.tags | campaign_id: 777 }}
     # data = %{ data | fields:    %{ data.fields | value: 7 }}
-    # data |> FsChannels.InConnection.write()
+    # data |> FreeswitchRealtime.InConnection.write()
   end
 
   def parse_channels(data) do
@@ -45,7 +45,7 @@ defmodule Pusher do
     serie = %FSChannelsSeries{}
     serie = %{ serie | fields: %{ serie.fields | value: total }}
 
-    case serie |> FsChannels.InConnection.write([async: true, precision: :seconds]) do
+    case serie |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         Logger.info "wrote total: #{total}"
       _  ->

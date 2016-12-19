@@ -7,7 +7,7 @@ defmodule Collector do
   end
 
   def init(state) do
-    Logger.debug "[init] we will collect channels information from " <> Application.fetch_env!(:fs_channels, :sqlite_db)
+    Logger.debug "[init] we will collect channels information from " <> Application.fetch_env!(:freeswitch_realtime, :sqlite_db)
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     {:ok, state}
   end
@@ -21,11 +21,11 @@ defmodule Collector do
   defp schedule_task() do
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
 
-    if File.regular?(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+    if File.regular?(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
       # Dispatch Task
       task_read_channels()
     else
-      Logger.error "sqlite database not found: " <> Application.fetch_env!(:fs_channels, :sqlite_db)
+      Logger.error "sqlite database not found: " <> Application.fetch_env!(:freeswitch_realtime, :sqlite_db)
     end
 
     # current_date = :os.timestamp |> :calendar.now_to_datetime
@@ -48,7 +48,7 @@ defmodule Collector do
   end
 
   defp get_channels_aggr() do
-    case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+    case Sqlitex.open(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
       {:ok, db} ->
         # Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
         Sqlitex.query(db, "SELECT count(*) as count, campaign_id FROM channels GROUP BY campaign_id;")
@@ -59,7 +59,7 @@ defmodule Collector do
   end
 
   # defp get_channels_aggr_user() do
-  #   case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+  #   case Sqlitex.open(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
   #     {:ok, db} ->
   #       Sqlitex.query(db, "SELECT count(*) as count, user_id FROM channels GROUP BY user_id;")
   #     {:error, reason} ->
@@ -69,7 +69,7 @@ defmodule Collector do
   # end
 
   # defp get_channels_aggr_total() do
-  #   case Sqlitex.open(Application.fetch_env!(:fs_channels, :sqlite_db)) do
+  #   case Sqlitex.open(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
   #     {:ok, db} ->
   #       Sqlitex.query(db, "SELECT count(*) as count FROM channels;")
   #     {:error, reason} ->

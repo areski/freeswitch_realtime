@@ -1,4 +1,4 @@
-defmodule FsChannels.InConnection do
+defmodule FreeswitchRealtime.InConnection do
   use Instream.Connection, otp_app: :influxcon_app
 
 end

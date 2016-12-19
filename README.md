@@ -1,7 +1,7 @@
-# Collect & Push FreeSWITCH channels to Influxdb [![Build Status](https://travis-ci.org/areski/fs_channels_influxdb.svg?branch=master)](https://travis-ci.org/areski/fs_channels_influxdb)
+# Collect Realtime information from FreeSWITCH to Influxdb & PostgreSQL [![Build Status](https://travis-ci.org/areski/freeswitch_realtime.svg?branch=master)](https://travis-ci.org/areski/freeswitch_realtime)
 
 
-Collect and push channels information from [FreeSWITCH](https://freeswitch.org/) Sqlite CoreDB to [InfluxDB](https://influxdata.com/).
+Collect Realtime information from [FreeSWITCH](https://freeswitch.org/) to [InfluxDB](https://influxdata.com/) & PostgreSQL.
 
 Channels information are pushed in the form of:
 
@@ -17,19 +17,19 @@ If you wish to use this with an other project you might want to remove `campaign
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add `fs_channels` to your list of dependencies in `mix.exs`:
+  1. Add `freeswitch_realtime` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
-      [{:fs_channels, "~> 0.1.0"}]
+      [{:freeswitch_realtime, "~> 0.1.0"}]
     end
     ```
 
-  2. Ensure `fs_channels` is started before your application:
+  2. Ensure `freeswitch_realtime` is started before your application:
 
     ```elixir
     def application do
-      [applications: [:fs_channels]]
+      [applications: [:freeswitch_realtime]]
     end
     ```
 
@@ -42,7 +42,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   4. Create directory for logs:
 
     ```
-    mkdir /var/log/fs_channels
+    mkdir /var/log/freeswitch_realtime
     ```
 
 
@@ -68,13 +68,13 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Start on reboot
 
-  Add fs_channels to `systemd` on Debian 8.x:
+  Add freeswitch_realtime to `systemd` on Debian 8.x:
 
   ```
-  cp fs_channels.service /lib/systemd/system/fs_channels.service
-  systemctl enable fs_channels.service
+  cp freeswitch_realtime.service /lib/systemd/system/freeswitch_realtime.service
+  systemctl enable freeswitch_realtime.service
   systemctl daemon-reload
-  systemctl restart fs_channels.service
+  systemctl restart freeswitch_realtime.service
   ```
 
 
