@@ -84,4 +84,3 @@ List of improvements and tasks,
 
 - [ ] use [conform](https://github.com/bitwalker/conform) to support config file
 - [ ] install script to quickly deploy
-- [ ] push to PostgreSQL

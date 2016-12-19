@@ -1,4 +1,4 @@
-defmodule Pusher do
+defmodule PushInfluxDB do
   use GenServer
   require Logger
 

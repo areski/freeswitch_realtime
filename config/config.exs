@@ -62,7 +62,7 @@ config :freeswitch_realtime,
   influxdatabase:  "newfiesdialer"
 
 # InfluxDB configuration
-config :influxcon_app, FreeswitchRealtime.InConnection,
+config :freeswitch_realtime, FreeswitchRealtime.InConnection,
   host:      "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],

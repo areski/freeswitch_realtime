@@ -10,9 +10,9 @@ defmodule FreeswitchRealtime do
     children = [
       # Starts a worker by calling: FreeswitchRealtime.Worker.start_link(arg1, arg2, arg3)
       # worker(FreeswitchRealtime.Worker, [arg1, arg2, arg3]),
+      supervisor(FreeswitchRealtime.Repo, []),
       worker(Collector, [[], [name: MyCollector]]),
-      # worker(Pusher, [[], [name: MyPusher]]),
-      worker(Pusher, [0]),
+      worker(PushInfluxDB, [0]),
       # We dont use `Sqlitex.Server` as it's not possible to catch errors on reading/opening the database
       # worker(Sqlitex.Server, [Application.fetch_env!(:freeswitch_realtime, :sqlite_db), [name: Sqlitex.Server]]),
       FreeswitchRealtime.InConnection.child_spec,

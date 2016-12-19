@@ -61,8 +61,13 @@ config :freeswitch_realtime,
   # influxdatabase:  "newfiesdialer",
   influxdatabase:  "newfiesdialer"
 
-# InfluxDB configuration
-config :influxcon_app, FreeswitchRealtime.InConnection,
+# Push to PostgreSQL
+config :freeswitch_realtime, FreeswitchRealtime.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "postgres://DBUSERNAME:DBPASSWORD@DBHOST/DBNAME"
+
+# Push to InfluxDB
+config :freeswitch_realtime, FreeswitchRealtime.InConnection,
   host:      "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],

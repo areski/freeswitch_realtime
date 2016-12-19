@@ -40,7 +40,7 @@ defmodule Collector do
       {:ok, []} ->
         Logger.info "aggregate channels is empty []"
       {:ok, _} ->
-        Pusher.push_aggr_channel(aggr_channel)
+        PushInfluxDB.push_aggr_channel(aggr_channel)
     end
 
     # cnt = get_channels_count()
