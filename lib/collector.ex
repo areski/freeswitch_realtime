@@ -41,6 +41,7 @@ defmodule Collector do
         Logger.info "aggregate channels is empty []"
       {:ok, _} ->
         PushInfluxDB.push_aggr_channel(aggr_channel)
+        PusherPG.update_campaign_rt(aggr_channel)
     end
 
     # cnt = get_channels_count()
@@ -51,7 +52,7 @@ defmodule Collector do
     case Sqlitex.open(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
       {:ok, db} ->
         # Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-        Sqlitex.query(db, "SELECT count(*) as count, campaign_id FROM channels GROUP BY campaign_id;")
+        Sqlitex.query(db, "SELECT count(*) as count, campaign_id, leg_type FROM channels GROUP BY campaign_id, leg_type;")
       {:error, reason} ->
         Logger.error reason
         {:error}

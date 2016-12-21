@@ -13,6 +13,7 @@ defmodule FreeswitchRealtime do
       supervisor(FreeswitchRealtime.Repo, []),
       worker(Collector, [[], [name: MyCollector]]),
       worker(PushInfluxDB, [0]),
+      worker(PusherPG, [0]),
       # We dont use `Sqlitex.Server` as it's not possible to catch errors on reading/opening the database
       # worker(Sqlitex.Server, [Application.fetch_env!(:freeswitch_realtime, :sqlite_db), [name: Sqlitex.Server]]),
       FreeswitchRealtime.InConnection.child_spec,
