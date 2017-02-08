@@ -17,7 +17,7 @@ If you wish to use this with an other project you might want to remove `campaign
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add `freeswitch_realtime` to your list of dependencies in `mix.exs`:
+1. Add `freeswitch_realtime` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
@@ -25,7 +25,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     end
     ```
 
-  2. Ensure `freeswitch_realtime` is started before your application:
+2. Ensure `freeswitch_realtime` is started before your application:
 
     ```elixir
     def application do
@@ -33,49 +33,41 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     end
     ```
 
-  3. Add host in your `/etc/hosts` eg:
-
-    ```
-    127.0.0.1     influxdb_host
-    ```
-
-  4. Create directory for logs:
+3. Create directory for logs:
 
     ```
     mkdir /var/log/freeswitch_realtime
     ```
 
+4. Add host in your `/etc/hosts` eg:
 
-## Compile & Build Release
+    ```
+    127.0.0.1     influxdb_host
+    ```
 
-  1. Edit version in `mix.exs`
+# Compile & Build Release
 
-
-  2. Compile:
-
-      MIX_ENV=prod mix compile
-
-
-  3. Build release:
-
-      MIX_ENV=prod mix release
+1. Edit version in `mix.exs`
 
 
-  4. Build Deb package:
+2. Compile:
 
-      MIX_ENV=prod mix release --deb
+    MIX_ENV=prod mix compile
+
+
+3. Build release:
+
+    MIX_ENV=prod mix release
 
 
 ## Start on reboot
 
-  Add freeswitch_realtime to `systemd` on Debian 8.x:
+Add freeswitch_realtime to `systemd` on Debian 8.x:
 
-  ```
-  cp freeswitch_realtime.service /lib/systemd/system/freeswitch_realtime.service
-  systemctl enable freeswitch_realtime.service
-  systemctl daemon-reload
-  systemctl restart freeswitch_realtime.service
-  ```
+    cp freeswitch_realtime.service /lib/systemd/system/freeswitch_realtime.service
+    systemctl enable freeswitch_realtime.service
+    systemctl daemon-reload
+    systemctl restart freeswitch_realtime.service
 
 
 ## Todo
@@ -84,3 +76,5 @@ List of improvements and tasks,
 
 - [ ] use [conform](https://github.com/bitwalker/conform) to support config file
 - [ ] install script to quickly deploy
+- [ ] add inch_ex
+- [ ] add credo - https://github.com/rrrene/credo
