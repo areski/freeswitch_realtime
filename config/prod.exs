@@ -44,7 +44,7 @@ config :logger, :error_log,
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
   path: "/var/log/freeswitch_realtime/elixir-debug.log",
-  level: :info,
+  level: :debug,
   format: "$time $metadata[$level] $levelpad$message\n"
   # metadata: [:file, :line]
 

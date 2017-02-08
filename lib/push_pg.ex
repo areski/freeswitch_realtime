@@ -23,7 +23,7 @@ defmodule PusherPG do
       :ok
   """
   def raw_update_campaign_rt(channel_info) do
-    Logger.debug "Raw update Campaign RT..."
+    Logger.debug "Raw update Campaign RT #{inspect channel_info}..."
     querystring = case channel_info[:leg_type] do
         1 ->
           "UPDATE dialer_campaign_rtinfo SET current_channels_aleg=$1, updated_date=NOW() WHERE campaign_id=$2"
