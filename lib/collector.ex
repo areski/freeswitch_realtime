@@ -7,9 +7,16 @@ defmodule Collector do
   end
 
   def init(state) do
-    Logger.debug "[init] we will collect channels information from " <> Application.fetch_env!(:freeswitch_realtime, :sqlite_db)
+    log_version()
+    Logger.info "[init] we will collect channels information from " <> Application.fetch_env!(:freeswitch_realtime, :sqlite_db)
     Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
     {:ok, state}
+  end
+
+  def log_version() do
+    {:ok, vsn} = :application.get_key(:freeswitch_realtime, :vsn)
+    version = List.to_string(vsn)
+    Logger.info "[starting] freeswitch_realtime version (#{version})"
   end
 
   def handle_info(:timeout_1, state) do
