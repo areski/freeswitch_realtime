@@ -4,7 +4,6 @@ defmodule PusherPG do
 
   alias Ecto.Adapters.SQL
   alias FreeswitchRealtime.Repo
-  alias FreeswitchRealtime.CampaignRT
 
   @moduledoc """
   GenServer Module to push Channels info to PostgreSQL.
@@ -30,7 +29,7 @@ defmodule PusherPG do
         2 ->
           "UPDATE dialer_campaign_rtinfo SET current_channels_bleg=$1, updated_date=NOW() WHERE campaign_id=$2"
       end
-    result = SQL.query(Repo, querystring , [channel_info[:count], channel_info[:campaign_id]])
+    SQL.query(Repo, querystring , [channel_info[:count], channel_info[:campaign_id]])
   end
 
   @doc """
@@ -50,6 +49,20 @@ defmodule PusherPG do
   end
 
   @doc """
+  Async update CampaignRT Info (channels)
+  """
+  def async_update_campaign_rt(result) do
+    GenServer.cast(__MODULE__, {:update_campaign_rt, result})
+  end
+
+  def handle_cast({:update_campaign_rt, result}, state) do
+    {:ok, _} = update_campaign_rt(result)
+    {:noreply, state}
+  end
+
+  # !!! Not used at the moment - Not working...
+
+  @doc """
   Reduce Campaign Channels information
 
   !!! Not used at the moment - Not working...
@@ -63,11 +76,14 @@ defmodule PusherPG do
   """
   def reduce_channels_map(channels) do
     # IO.inspect channels
-    reduce_channels = %{}
-    reduce_channels = Enum.map(channels, fn x -> x[:campaign_id] end) |> Enum.uniq |> Enum.reduce(%{}, fn(x, acc) -> Map.merge(acc, %{x => [total_count: 0, aleg_count: 0, bleg_count: 0]}) end)
+    reduce_channels = 
+        Enum.map(channels, fn x -> x[:campaign_id] end) 
+        |> Enum.uniq 
+        |> Enum.reduce(%{}, fn(x, acc) -> Map.merge(acc, %{x => [total_count: 0, aleg_count: 0, bleg_count: 0]}) end)
+
     for val <- channels do
       # Map.fetch(reduce_channels, val[:campaign_id])//
-      IO.inspect reduce_channels[val[:campaign_id]]
+      # IO.inspect reduce_channels[val[:campaign_id]]
       total_count = case reduce_channels[val[:campaign_id]][:total_count] do
         nil -> 0
         x -> x
@@ -84,29 +100,17 @@ defmodule PusherPG do
       end
 
       # /// Something not working...
-      IO.puts "==#{total_count}"
-      IO.inspect reduce_channels[val[:campaign_id]]
+      # IO.puts "==#{total_count}"
+      # IO.inspect reduce_channels[val[:campaign_id]]
       [aleg_count, bleg_count] = case val[:leg_type] do
         1 -> [aleg_count + val[:count], bleg_count]
         2 -> [aleg_count, bleg_count + val[:count]]
       end
-      IO.inspect "aleg_count:#{aleg_count} - bleg_count:#{bleg_count}"
-      IO.inspect [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count]
+      # IO.inspect "aleg_count:#{aleg_count} - bleg_count:#{bleg_count}"
+      # IO.inspect [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count]
       reduce_channels = Map.put(reduce_channels, val[:campaign_id], [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count])
     end
     reduce_channels
-  end
-
-  @doc """
-  Async update CampaignRT Info (channels)
-  """
-  def update_campaign_rt(result) do
-    GenServer.cast(__MODULE__, {:update_campaign_rt, result})
-  end
-
-  def handle_cast({:update_campaign_rt, result}, state) do
-    {:ok, _} = update_campaign_rt(result)
-    {:noreply, state}
   end
 
 end

@@ -104,10 +104,9 @@ defmodule PushInfluxDB do
     GenServer.call(__MODULE__, :pop)
   end
 
-  def lookup(item) do
-    :error
-  end
-
+  # def lookup(item) do
+  #  :error
+  # end
 
   # Server (callbacks)
   # Sync

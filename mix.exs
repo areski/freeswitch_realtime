@@ -3,15 +3,13 @@ defmodule FreeswitchRealtime.Mixfile do
 
   def project do
     [app: :freeswitch_realtime,
-     version: "0.1.1",
-     elixir: "~> 1.3",
+     version: "0.2.0",
+     elixir: "~> 1.4.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
-
-     # hex
-     description: description,
-     package: package,
+     description: description(),
+     package: package(),
     ]
   end
 
@@ -19,31 +17,23 @@ defmodule FreeswitchRealtime.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :exrm, :swab, :sqlitex, :instream, :postgrex, :ecto, :timex, :timex_ecto, :logger_file_backend],
-     mod: {FreeswitchRealtime, []}]
+    [mod: {FreeswitchRealtime, []},
+     extra_applications: [:logger]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
+  # Dependencies
   defp deps do
     [
      {:ex_doc, "~> 0.13.0", only: :dev},
-     {:exrm, "~> 1.0.8"},
-     # {:exrm_deb, "~> 0.0.7"},
-     {:sqlitex, "~> 1.0.0"},
+     {:distillery, "~> 1.0"},
+     # {:sqlitex, path: "../sqlitex"},
+     {:sqlitex, "~> 1.1.1"},
      {:ecto, "~> 2.0.0"},
      {:postgrex, ">= 0.0.0"},
-     {:logger_file_backend, "0.0.7"},
+     {:logger_file_backend, "0.0.9"},
      {:instream, "~> 0.14"},
      {:swab, github: "crownedgrouse/swab", branch: "master"},
-     {:timex, "~> 3.1.5"},
+     {:timex, "~> 3.1.9"},
      {:timex_ecto, "~> 3.0.5"}
     ]
   end
