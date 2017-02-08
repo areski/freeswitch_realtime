@@ -8,14 +8,16 @@ After=redis.service
 #After=network.target influxd.service freeswitch.service
 
 [Service]
-Type=forking
+Type=simple
 TimeoutSec=120
 User=root
 Group=daemon
 Environment=MIX_ENV=prod PORT=8888
 ExecStart=/app/freeswitch_realtime/bin/freeswitch_realtime start
 ExecStop=/app/freeswitch_realtime/bin/freeswitch_realtime stop
-Restart=always
+RestartSec=5
+RemainAfterExit=yes
+SyslogIdentifier=freeswitch_realtime
 
 [Install]
 WantedBy=multi-user.target
