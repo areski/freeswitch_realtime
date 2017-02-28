@@ -64,7 +64,7 @@ defmodule PushInfluxDB do
   """
   def parse_channels(data) do
     serie = %FSChannelsCampaignSeries{}
-    serie = %{ serie | tags: %{ serie.tags | campaign_id: data[:campaign_id], leg_type: data[:leg_type] }}
+    serie = %{ serie | tags: %{ serie.tags | campaign_id: data[:campaign_id], leg_type: data[:leg_type], host: Application.fetch_env!(:freeswitch_realtime, :local_host) }}
     serie = %{ serie | fields: %{ serie.fields | value: data[:count] }}
     serie
   end
@@ -85,7 +85,8 @@ defmodule PushInfluxDB do
       |> Enum.filter(leg?)
       |> Enum.reduce(0, fn(x, acc) -> (x[:count] + acc) end)
     serie = %FSChannelsSeries{}
-    serie = %{ serie | tags: %{ serie.tags | leg_type: leg_type }}
+    serie = %{ serie | tags: %{ serie.tags | leg_type: leg_type,
+                                             host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
     serie = %{ serie | fields: %{ serie.fields | value: total_leg }}
 
     case serie |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do

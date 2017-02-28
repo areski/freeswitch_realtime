@@ -58,8 +58,8 @@ config :logger, :debug_log,
 
 config :freeswitch_realtime,
   sqlite_db: "/home/areski/private/bitbucket/newfies-dialer/playground/channels/coredb.sqlite",
-  # influxdatabase:  "newfiesdialer",
-  influxdatabase:  "newfiesdialer"
+  influxdatabase:  "newfiesdialer",
+  local_host: "127.0.0.1"
 
 # Push to PostgreSQL
 config :freeswitch_realtime, FreeswitchRealtime.Repo,

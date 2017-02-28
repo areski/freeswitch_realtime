@@ -58,8 +58,8 @@ config :logger, :debug_log,
 
 config :freeswitch_realtime,
   sqlite_db: "/dev/shm/core.db",
-  # influxdatabase:  "newfiesdialer",
-  influxdatabase:  "newfiesdialer"
+  influxdatabase:  "newfiesdialer",
+  local_host: "LOCAL_IP"
 
 # InfluxDB configuration
 config :freeswitch_realtime, FreeswitchRealtime.InConnection,

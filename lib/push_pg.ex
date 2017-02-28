@@ -25,11 +25,14 @@ defmodule PusherPG do
     Logger.debug "Raw update Campaign RT #{inspect channel_info}..."
     querystring = case channel_info[:leg_type] do
         1 ->
-          "UPDATE dialer_campaign_rtinfo SET current_channels_aleg=$1, updated_date=NOW() WHERE campaign_id=$2"
+          "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW())
+           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
         2 ->
-          "UPDATE dialer_campaign_rtinfo SET current_channels_bleg=$1, updated_date=NOW() WHERE campaign_id=$2"
+          "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW())
+           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, updated_date=NOW()"
       end
-    SQL.query(Repo, querystring , [channel_info[:count], channel_info[:campaign_id]])
+    SQL.query(Repo, querystring,
+              [channel_info[:count], 116, Application.fetch_env!(:freeswitch_realtime, :local_host)])
   end
 
   @doc """
@@ -76,9 +79,9 @@ defmodule PusherPG do
   """
   def reduce_channels_map(channels) do
     # IO.inspect channels
-    reduce_channels = 
-        Enum.map(channels, fn x -> x[:campaign_id] end) 
-        |> Enum.uniq 
+    reduce_channels =
+        Enum.map(channels, fn x -> x[:campaign_id] end)
+        |> Enum.uniq
         |> Enum.reduce(%{}, fn(x, acc) -> Map.merge(acc, %{x => [total_count: 0, aleg_count: 0, bleg_count: 0]}) end)
 
     for val <- channels do
