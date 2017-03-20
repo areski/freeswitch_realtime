@@ -34,7 +34,8 @@ defmodule FreeswitchRealtime.Mixfile do
      {:instream, "~> 0.14"},
      {:swab, github: "crownedgrouse/swab", branch: "master"},
      {:timex, "~> 3.1.9"},
-     {:timex_ecto, "~> 3.0.5"}
+     {:timex_ecto, "~> 3.0.5"},
+     {:tzdata, "~> 0.5.11"}
     ]
   end
 
