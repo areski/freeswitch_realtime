@@ -31,7 +31,7 @@ defmodule FreeswitchRealtime.Mixfile do
      {:ecto, "~> 2.0.0"},
      {:postgrex, ">= 0.0.0"},
      {:logger_file_backend, "0.0.9"},
-     {:instream, "~> 0.14"},
+     {:instream, "~> 0.15"},
      {:swab, github: "crownedgrouse/swab", branch: "master"},
      {:timex, "~> 3.1.9"},
      {:timex_ecto, "~> 3.0.5"},
