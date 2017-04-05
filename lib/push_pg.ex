@@ -29,7 +29,7 @@ defmodule PusherPG do
            ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
         2 ->
           "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW())
-           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, updated_date=NOW()"
+           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
       end
     SQL.query(Repo, querystring,
               [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:freeswitch_realtime, :local_host)])
