@@ -74,6 +74,10 @@ defmodule PusherPG do
         2 => [total_count: 2, aleg_count: 3, bleg_count: 1]}
 
   """
+  def reduce_channels_map(nil) do
+    nil
+  end
+  """
   def reduce_channels_map(channels) do
     # IO.inspect channels
     reduce_channels =
@@ -83,34 +87,35 @@ defmodule PusherPG do
 
     for val <- channels do
       # Map.fetch(reduce_channels, val[:campaign_id])//
-      # IO.inspect reduce_channels[val[:campaign_id]]
-      total_count = case reduce_channels[val[:campaign_id]][:total_count] do
-        nil -> 0
-        x -> x
-      end
-      total_count = total_count + val[:count]
 
-      aleg_count = case reduce_channels[val[:campaign_id]][:aleg_count] do
-        nil -> 0
-        x -> x
+      total_count = if reduce_channels[val[:campaign_id]][:total_count] == nil do
+        0 + val[:count]
+      else
+        reduce_channels[val[:campaign_id]][:total_count] + val[:count]
       end
-      bleg_count = case reduce_channels[val[:campaign_id]][:bleg_count] do
-        nil -> 0
-        x -> x
+
+      aleg_count = if reduce_channels[val[:campaign_id]][:aleg_count] == nil do
+        0
+      else
+        reduce_channels[val[:campaign_id]][:aleg_count]
+      end
+
+      bleg_count = if reduce_channels[val[:campaign_id]][:bleg_count] == nil do
+        0
+      else
+        reduce_channels[val[:campaign_id]][:bleg_count]
       end
 
       # /// Something not working...
-      # IO.puts "==#{total_count}"
-      # IO.inspect reduce_channels[val[:campaign_id]]
       [aleg_count, bleg_count] = case val[:leg_type] do
         1 -> [aleg_count + val[:count], bleg_count]
         2 -> [aleg_count, bleg_count + val[:count]]
       end
-      # IO.inspect "aleg_count:#{aleg_count} - bleg_count:#{bleg_count}"
-      # IO.inspect [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count]
-      reduce_channels = Map.put(reduce_channels, val[:campaign_id], [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count])
+      reduce_channels = Map.put(reduce_channels, val[:campaign_id],
+                                [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count])
     end
     reduce_channels
   end
+  """
 
 end
