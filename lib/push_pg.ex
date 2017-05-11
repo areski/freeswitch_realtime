@@ -43,12 +43,9 @@ defmodule PusherPG do
       iex> PusherPG.update_campaign_rt({:ok, [[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]]})
       :ok
   """
-  def update_campaign_rt(result) do
-    case result do
-      {:ok, aggr_channel} ->
-        # res = reduce_channels_map(aggr_channel)
-        Enum.map(aggr_channel, &raw_update_campaign_rt/1)
-    end
+  def update_campaign_rt({:ok, aggr_channel}) do
+    # res = reduce_channels_map(aggr_channel)
+    Enum.map(aggr_channel, &raw_update_campaign_rt/1)
   end
 
   @doc """
