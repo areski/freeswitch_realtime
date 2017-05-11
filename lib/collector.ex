@@ -15,8 +15,9 @@ defmodule Collector do
 
   def log_version() do
     {:ok, vsn} = :application.get_key(:freeswitch_realtime, :vsn)
-    version = List.to_string(vsn)
-    Logger.info "[starting] freeswitch_realtime version (#{version})"
+    app_version = List.to_string(vsn)
+    {:elixir, _, ex_version} = List.keyfind(:application.which_applications, :elixir, 0)
+    Logger.info "[starting] freeswitch_realtime (app_version:#{app_version} - ex_version:#{ex_version})"
   end
 
   def handle_info(:timeout_1, state) do

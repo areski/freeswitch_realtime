@@ -4,7 +4,7 @@ defmodule FreeswitchRealtime.Mixfile do
   def project do
     [app: :freeswitch_realtime,
      version: "0.2.5",
-     elixir: "~> 1.4.1",
+     elixir: "~> 1.4.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
@@ -24,18 +24,18 @@ defmodule FreeswitchRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-     {:ex_doc, "~> 0.13.0", only: :dev},
-     {:distillery, "~> 1.0"},
+     {:ex_doc, "~> 0.15.1", only: :dev},
+     {:distillery, "~> 1.4"},
      # {:sqlitex, path: "../sqlitex"},
-     {:sqlitex, "~> 1.1.1"},
-     {:ecto, "~> 2.0.0"},
+     {:sqlitex, "~> 1.3.2"},
+     {:ecto, "~> 2.1.4"},
      {:postgrex, ">= 0.0.0"},
      {:logger_file_backend, "0.0.9"},
      {:instream, "~> 0.15"},
      {:swab, github: "crownedgrouse/swab", branch: "master"},
-     {:timex, "~> 3.1.9"},
-     {:timex_ecto, "~> 3.0.5"},
-     {:tzdata, "~> 0.5.11"}
+     # {:timex, "~> 3.1.9"},
+     # {:timex_ecto, "~> 3.0.5"},
+     # {:tzdata, "~> 0.5.11"}
     ]
   end
 

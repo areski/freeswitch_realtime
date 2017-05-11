@@ -6,7 +6,7 @@ defmodule FreeswitchRealtime.CampaignRT do
     field :campaign_id,             :integer, default: 0
     field :host,                    :string
     field :current_channels_total,  :integer, default: 0
-    field :updated_date,            Timex.Ecto.DateTime
+    field :updated_date,            Ecto.DateTime
   end
 end
 
