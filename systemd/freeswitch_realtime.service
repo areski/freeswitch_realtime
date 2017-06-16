@@ -5,6 +5,7 @@ After=syslog.target
 After=network.target
 After=postgresql.service
 After=redis.service
+After=epmd.service
 #After=network.target influxd.service freeswitch.service
 
 [Service]
