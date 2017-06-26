@@ -3,7 +3,7 @@ defmodule FreeswitchRealtime.Mixfile do
 
   def project do
     [app: :freeswitch_realtime,
-     version: "0.3.0",
+     version: "0.3.1",
      elixir: "~> 1.4.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
