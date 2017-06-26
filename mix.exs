@@ -24,13 +24,13 @@ defmodule FreeswitchRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-     {:ex_doc, "~> 0.15.1", only: :dev},
+     {:ex_doc, "~> 0.16.1", only: :dev},
      {:distillery, "~> 1.4"},
      # {:sqlitex, path: "../sqlitex"},
      {:sqlitex, "~> 1.3.2"},
      {:ecto, "~> 2.1.4"},
      {:postgrex, ">= 0.0.0"},
-     {:logger_file_backend, "0.0.9"},
+     {:logger_file_backend, "0.0.10"},
      {:instream, "~> 0.15"},
      {:swab, github: "crownedgrouse/swab", branch: "master"},
      # {:timex, "~> 3.1.9"},
