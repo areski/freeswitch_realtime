@@ -70,11 +70,38 @@ Add freeswitch_realtime to `systemd` on Debian 8.x:
     systemctl restart freeswitch_realtime.service
 
 
+## Troubleshoot
+
+Ensure InfluxDB is working properly.
+
+Create DB::
+
+    curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+
+
+Write to serie cpu_load_short::
+
+    curl -i -XPOST 'http://localhost:8086/write?db=mydb' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'
+
+
+Read data::
+
+    curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mydb" --data-urlencode "q=SELECT \"value\" FROM \"cpu_load_short\" WHERE \"region\"='us-west'"
+
+
+With to database `newfiesdialer` serie `freeswitch_channels_cpg_total`::
+
+    curl -i -XPOST 'http://localhost:8086/write?db=newfiesdialer' --data-binary 'freeswitch_channels_cpg_total,host=37.139.13.157,campaign_id=1,leg_type=1 value=0.64 1434055562000000000'
+
+Read from serie `freeswitch_channels_cpg_total`:
+
+    curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=newfiesdialer" --data-urlencode "q=SELECT \"value\" FROM \"freeswitch_channels_cpg_total\""
+
+
 ## Todo
 
 List of improvements and tasks,
 
 - [ ] use [conform](https://github.com/bitwalker/conform) to support config file
-- [ ] install script to quickly deploy
 - [ ] add inch_ex
 - [ ] add credo - https://github.com/rrrene/credo
