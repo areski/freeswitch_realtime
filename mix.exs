@@ -4,7 +4,7 @@ defmodule FreeswitchRealtime.Mixfile do
   def project do
     [app: :freeswitch_realtime,
      version: "0.3.1",
-     elixir: "~> 1.4.2",
+     elixir: "~> 1.4.5",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
@@ -24,8 +24,8 @@ defmodule FreeswitchRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-     {:ex_doc, "~> 0.16.1", only: :dev},
-     {:distillery, "~> 1.4"},
+     {:ex_doc, "~> 0.16.2", only: :dev},
+     {:distillery, "~> 1.4.1"},
      # {:sqlitex, path: "../sqlitex"},
      {:sqlitex, "~> 1.3.2"},
      {:ecto, "~> 2.1.4"},
