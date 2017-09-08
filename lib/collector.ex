@@ -9,7 +9,7 @@ defmodule Collector do
   def init(state) do
     log_version()
     Logger.info "[init] we will collect channels information from " <> Application.fetch_env!(:freeswitch_realtime, :sqlite_db)
-    Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
+    Process.send_after(self(), :timeout_1, 1 * 500) # 0.5 second
     {:ok, state}
   end
 
@@ -28,7 +28,7 @@ defmodule Collector do
   end
 
   defp schedule_task() do
-    Process.send_after(self(), :timeout_1, 1 * 1000) # 1 second
+    Process.send_after(self(), :timeout_1, 1 * 500) # 0.5 second
 
     if File.regular?(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
       # Dispatch Task
