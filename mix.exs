@@ -3,7 +3,7 @@ defmodule FSRealtime.Mixfile do
 
   def project do
     [app: :fs_realtime,
-     version: "0.4.1",
+     version: "0.5.0",
      elixir: "~> 1.5.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
