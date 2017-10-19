@@ -74,3 +74,12 @@ config :freeswitch_realtime, FreeswitchRealtime.InConnection,
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
+
+if Mix.env == :test or Mix.env == :dev do
+  config :mix_test_watch,
+    tasks: [
+      "test",
+      "credo -a --strict",
+      "dialyzer",
+    ]
+end

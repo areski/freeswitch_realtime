@@ -24,18 +24,21 @@ defmodule FreeswitchRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-     {:ex_doc, "~> 0.18.1", only: :dev},
-     {:distillery, "~> 1.5.2"},
-     # {:sqlitex, path: "../sqlitex"},
-     {:sqlitex, "~> 1.3.3"},
-     {:ecto, "~> 2.2.6"},
-     {:postgrex, ">= 0.0.0"},
-     {:logger_file_backend, "0.0.10"},
-     {:instream, "~> 0.16"},
-     {:swab, github: "crownedgrouse/swab", branch: "master"},
-     # {:timex, "~> 3.1.9"},
-     # {:timex_ecto, "~> 3.0.5"},
-     # {:tzdata, "~> 0.5.11"}
+      {:ex_doc, "~> 0.18.1", only: :dev},
+      {:distillery, "~> 1.5.2"},
+      # {:sqlitex, path: "../sqlitex"},
+      {:sqlitex, "~> 1.3.3"},
+      {:ecto, "~> 2.2.6"},
+      {:postgrex, ">= 0.0.0"},
+      {:logger_file_backend, "0.0.10"},
+      {:instream, "~> 0.16"},
+      {:swab, github: "crownedgrouse/swab", branch: "master"},
+      # {:timex, "~> 3.1.9"},
+      # {:timex_ecto, "~> 3.0.5"},
+      # {:tzdata, "~> 0.5.11"}
+      {:mix_test_watch, "~> 0.5.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.8.7", only: [:dev, :test], runtime: false},
+      # {:dogma, "~> 0.1", only: :dev},
     ]
   end
 
