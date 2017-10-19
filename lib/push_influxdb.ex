@@ -14,7 +14,8 @@ defmodule PushInfluxDB do
 
   ## Examples
 
-      iex> PushInfluxDB.push_aggr_channel({:ok, [[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]]})
+      iex> PushInfluxDB.push_aggr_channel({:ok,
+        [[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]]})
       :ok
 
   """
@@ -34,7 +35,9 @@ defmodule PushInfluxDB do
 
   ## Examples
 
-      iex> PushInfluxDB.write_points([[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]])
+      iex> PushInfluxDB.write_points(
+        [[count: 3, campaign_id: 1, leg_type: 1],
+        [count: 3, campaign_id: 2, leg_type: 1]])
       :ok
 
   """
@@ -42,7 +45,8 @@ defmodule PushInfluxDB do
     series = Enum.map(chan_result, fn(x) -> parse_channels x end)
     case series |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
-        Logger.info "wrote " <> (Enum.count(series) |> Integer.to_string) <> " points"
+        cnt = Enum.count(series)
+        Logger.info "wrote #{cnt} points"
       {:error, :econnrefused} ->
         Logger.error "error writing points"
       _  ->
@@ -64,8 +68,11 @@ defmodule PushInfluxDB do
   """
   def parse_channels(data) do
     serie = %FSChannelsCampaignSeries{}
-    serie = %{ serie | tags: %{ serie.tags | campaign_id: data[:campaign_id], leg_type: data[:leg_type], host: Application.fetch_env!(:freeswitch_realtime, :local_host) }}
-    serie = %{ serie | fields: %{ serie.fields | value: data[:count] }}
+    serie = %{serie | tags: %{serie.tags |
+      campaign_id: data[:campaign_id],
+      leg_type: data[:leg_type],
+      host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
+    serie = %{serie | fields: %{serie.fields | value: data[:count]}}
     serie
   end
 
@@ -76,7 +83,12 @@ defmodule PushInfluxDB do
 
   ## Examples
 
-      iex> PushInfluxDB.write_total([[count: 3, campaign_id: 1, leg_type: 1], [count: 2, campaign_id: 1, leg_type: 2], [count: 3, campaign_id: 2, leg_type: 1], [count: 2, campaign_id: 3, leg_type: 1]], 1)
+      iex> PushInfluxDB.write_total([
+        [count: 3, campaign_id: 1, leg_type: 1],
+        [count: 2, campaign_id: 1, leg_type: 2],
+        [count: 3, campaign_id: 2, leg_type: 1],
+        [count: 2, campaign_id: 3, leg_type: 1]
+        ], 1)
       :ok
   """
   def write_total(chan_result, leg_type \\ 1) do
@@ -85,9 +97,9 @@ defmodule PushInfluxDB do
       |> Enum.filter(leg?)
       |> Enum.reduce(0, fn(x, acc) -> (x[:count] + acc) end)
     serie = %FSChannelsSeries{}
-    serie = %{ serie | tags: %{ serie.tags | leg_type: leg_type,
-                                             host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
-    serie = %{ serie | fields: %{ serie.fields | value: total_leg }}
+    serie = %{serie | tags: %{serie.tags | leg_type: leg_type,
+              host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
+    serie = %{serie | fields: %{serie.fields | value: total_leg}}
 
     case serie |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
