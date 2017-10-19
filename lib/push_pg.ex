@@ -24,15 +24,19 @@ defmodule PusherPG do
   def raw_update_campaign_rt(channel_info) do
     Logger.debug "Raw update Campaign RT #{inspect channel_info}..."
     querystring = case channel_info[:leg_type] do
-        1 ->
-          "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW())
-           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
-        2 ->
-          "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW())
-           ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
-      end
-    SQL.query(Repo, querystring,
-              [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:freeswitch_realtime, :local_host)])
+      1 ->
+        "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW())
+         ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
+      2 ->
+        "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW())
+         ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
+      _ ->
+        false
+    end
+    if querystring do
+      SQL.query(Repo, querystring,
+                [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:freeswitch_realtime, :local_host)])
+    end
   end
 
   @doc """
