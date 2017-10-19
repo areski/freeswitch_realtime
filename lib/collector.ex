@@ -60,7 +60,7 @@ defmodule Collector do
     case Sqlitex.open(Application.fetch_env!(:freeswitch_realtime, :sqlite_db)) do
       {:ok, db} ->
         # Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
-        Sqlitex.query(db, "SELECT count(*) as count, campaign_id, leg_type FROM channels GROUP BY campaign_id, leg_type;")
+        Sqlitex.query(db, "SELECT count(*) as count, campaign_id, leg_type FROM channels WHERE leg_type > 0 GROUP BY campaign_id, leg_type;")
       {:error, reason} ->
         Logger.error reason
         {:error, reason}
