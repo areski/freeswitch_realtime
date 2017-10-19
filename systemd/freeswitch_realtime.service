@@ -14,11 +14,11 @@ TimeoutSec=120
 User=root
 Group=daemon
 Environment=MIX_ENV=prod PORT=8888
-ExecStart=/app/freeswitch_realtime/bin/freeswitch_realtime start
-ExecStop=/app/freeswitch_realtime/bin/freeswitch_realtime stop
+ExecStart=/app/freeswitch_realtime/bin/fs_realtime start
+ExecStop=/app/freeswitch_realtime/bin/fs_realtime stop
 RestartSec=5
 RemainAfterExit=yes
-SyslogIdentifier=freeswitch_realtime
+SyslogIdentifier=fs_realtime
 
 [Install]
 WantedBy=multi-user.target
