@@ -22,20 +22,31 @@ defmodule PusherPG do
       :ok
   """
   def raw_update_campaign_rt(channel_info) do
-    Logger.debug "Raw update Campaign RT #{inspect channel_info}..."
+    Logger.debug fn ->
+      "Raw update Campaign RT #{inspect channel_info}..."
+    end
     querystring = case channel_info[:leg_type] do
       1 ->
-        "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW())
-         ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
+        "INSERT INTO dialer_campaign_rtinfo \
+        (current_channels_aleg, current_channels_bleg, campaign_id, host, \
+        created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW()) \
+        ON CONFLICT (campaign_id, host) \
+        DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
       2 ->
-        "INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW())
-         ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
+        "INSERT INTO dialer_campaign_rtinfo \
+        (current_channels_aleg, current_channels_bleg, campaign_id, host, \
+        created_date, updated_date) VALUES (0, $1, $2, $3, NOW(), NOW()) \
+        ON CONFLICT (campaign_id, host) \
+        DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
       _ ->
         false
     end
     if querystring do
-      SQL.query(Repo, querystring,
-                [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:fs_realtime, :local_host)])
+      SQL.query(Repo, querystring, [
+        channel_info[:count],
+        channel_info[:campaign_id],
+        Application.fetch_env!(:fs_realtime, :local_host)
+      ])
     end
   end
 
@@ -44,7 +55,9 @@ defmodule PusherPG do
 
   ## Examples
 
-      iex> PusherPG.update_campaign_rt({:ok, [[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]]})
+      iex> PusherPG.update_campaign_rt({:ok,
+        [[count: 3, campaign_id: 1, leg_type: 1],
+        [count: 3, campaign_id: 2, leg_type: 1]]})
       :ok
   """
   def update_campaign_rt({:ok, aggr_channel}) do
@@ -73,7 +86,10 @@ defmodule PusherPG do
 
   ## Examples
 
-      iex> PusherPG.reduce_channels_map([[count: 3, campaign_id: 1, leg_type: 1], [count: 2, campaign_id: 2, leg_type: 1], [count: 1, campaign_id: 2, leg_type: 2]])
+      iex> PusherPG.reduce_channels_map([
+        [count: 3, campaign_id: 1, leg_type: 1],
+        [count: 2, campaign_id: 2, leg_type: 1],
+        [count: 1, campaign_id: 2, leg_type: 2]])
       %{1 => [total_count: 3, aleg_count: 3, aleg_count: 3],
         2 => [total_count: 2, aleg_count: 3, bleg_count: 1]}
 
@@ -84,30 +100,31 @@ defmodule PusherPG do
   """
   def reduce_channels_map(channels) do
     # IO.inspect channels
-    reduce_channels =
+    reduce_ch =
         Enum.map(channels, fn x -> x[:campaign_id] end)
         |> Enum.uniq
-        |> Enum.reduce(%{}, fn(x, acc) -> Map.merge(acc, %{x => [total_count: 0, aleg_count: 0, bleg_count: 0]}) end)
+        |> Enum.reduce(%{}, fn(x, acc) -> Map.merge(acc, \
+        %{x => [total_count: 0, aleg_count: 0, bleg_count: 0]}) end)
 
     for val <- channels do
-      # Map.fetch(reduce_channels, val[:campaign_id])//
+      # Map.fetch(reduce_ch, val[:campaign_id])//
 
-      total_count = if reduce_channels[val[:campaign_id]][:total_count] == nil do
+      total_count = if reduce_ch[val[:campaign_id]][:total_count] == nil do
         0 + val[:count]
       else
-        reduce_channels[val[:campaign_id]][:total_count] + val[:count]
+        reduce_ch[val[:campaign_id]][:total_count] + val[:count]
       end
 
-      aleg_count = if reduce_channels[val[:campaign_id]][:aleg_count] == nil do
+      aleg_count = if reduce_ch[val[:campaign_id]][:aleg_count] == nil do
         0
       else
-        reduce_channels[val[:campaign_id]][:aleg_count]
+        reduce_ch[val[:campaign_id]][:aleg_count]
       end
 
-      bleg_count = if reduce_channels[val[:campaign_id]][:bleg_count] == nil do
+      bleg_count = if reduce_ch[val[:campaign_id]][:bleg_count] == nil do
         0
       else
-        reduce_channels[val[:campaign_id]][:bleg_count]
+        reduce_ch[val[:campaign_id]][:bleg_count]
       end
 
       # /// Something not working...
@@ -115,10 +132,13 @@ defmodule PusherPG do
         1 -> [aleg_count + val[:count], bleg_count]
         2 -> [aleg_count, bleg_count + val[:count]]
       end
-      reduce_channels = Map.put(reduce_channels, val[:campaign_id],
-                                [total_count: total_count, aleg_count: aleg_count, bleg_count: bleg_count])
+      reduce_ch = Map.put(reduce_ch, val[:campaign_id], [
+        total_count: total_count,
+        aleg_count: aleg_count,
+        bleg_count: bleg_count
+      ])
     end
-    reduce_channels
+    reduce_ch
   end
   """
 

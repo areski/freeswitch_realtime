@@ -4,6 +4,7 @@ defmodule PushInfluxDB do
   """
   use GenServer
   require Logger
+  alias FSRealtime.InConnection
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -15,7 +16,8 @@ defmodule PushInfluxDB do
   ## Examples
 
       iex> PushInfluxDB.push_aggr_channel({:ok,
-        [[count: 3, campaign_id: 1, leg_type: 1], [count: 3, campaign_id: 2, leg_type: 1]]})
+        [[count: 3, campaign_id: 1, leg_type: 1],
+        [count: 3, campaign_id: 2, leg_type: 1]]})
       :ok
 
   """
@@ -43,7 +45,7 @@ defmodule PushInfluxDB do
   """
   def write_points(chan_result) do
     series = Enum.map(chan_result, fn(x) -> parse_channels x end)
-    case series |> FSRealtime.InConnection.write([async: true, precision: :seconds]) do
+    case series |> InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         cnt = Enum.count(series)
         Logger.info "wrote #{cnt} points"
@@ -101,7 +103,7 @@ defmodule PushInfluxDB do
               host: Application.fetch_env!(:fs_realtime, :local_host)}}
     serie = %{serie | fields: %{serie.fields | value: total_leg}}
 
-    case serie |> FSRealtime.InConnection.write([async: true, precision: :seconds]) do
+    case serie |> InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         Logger.info "wrote total: #{total_leg} on leg: #{leg_type}"
       _  ->
@@ -113,7 +115,7 @@ defmodule PushInfluxDB do
     GenServer.cast(__MODULE__, {:push, item})
   end
 
-  def pop() do
+  def pop do
     GenServer.call(__MODULE__, :pop)
   end
 

@@ -1,6 +1,10 @@
 defmodule FSChannelsCampaignSeries do
   use Instream.Series
 
+  @moduledoc """
+  InfluxDB serie for total channels per campaign
+  """
+
   series do
     database    Application.fetch_env!(:fs_realtime, :influxdatabase)
     measurement "freeswitch_channels_cpg_total"
@@ -17,6 +21,10 @@ end
 
 defmodule FSChannelsSeries do
   use Instream.Series
+
+  @moduledoc """
+  InfluxDB serie for total channels
+  """
 
   series do
     database    Application.fetch_env!(:fs_realtime, :influxdatabase)

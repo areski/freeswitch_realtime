@@ -1,6 +1,11 @@
 defmodule FSRealtime do
+  # See http://elixir-lang.org/docs/stable/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
   use Application
   require Logger
+  alias FSRealtime.InConnection
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -11,20 +16,26 @@ defmodule FSRealtime do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Starts a worker by calling: FSRealtime.Worker.start_link(arg1, arg2, arg3)
+      # Starts worker by calling:FSRealtime.Worker.start_link(arg1, arg2, arg3)
       # worker(FSRealtime.Worker, [arg1, arg2, arg3]),
       supervisor(FSRealtime.Repo, []),
       worker(Collector, [[], [name: MyCollector]]),
       worker(PushInfluxDB, [0]),
       worker(PusherPG, [0]),
-      # We dont use `Sqlitex.Server` as it's not possible to catch errors on reading/opening the database
-      # worker(Sqlitex.Server, [Application.fetch_env!(:fs_realtime, :sqlite_db), [name: Sqlitex.Server]]),
-      FSRealtime.InConnection.child_spec,
+      # We dont use `Sqlitex.Server` as it's not possible to catch IO db errors
+      # worker(Sqlitex.Server,
+        # [Application.fetch_env!(:fs_realtime, :sqlite_db),
+        # [name: Sqlitex.Server]]),
+      InConnection.child_spec,
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, max_restarts: 10, name: FSRealtime.Supervisor]
+    opts = [
+      strategy: :one_for_one,
+      max_restarts: 10,
+      name: FSRealtime.Supervisor
+    ]
     Supervisor.start_link(children, opts)
   end
 

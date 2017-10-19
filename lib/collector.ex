@@ -2,6 +2,10 @@ defmodule Collector do
   use GenServer
   require Logger
 
+  @moduledoc """
+  Collector module is in charge of orchestrating the collection and push of Channels info.
+  """
+
   def start_link(state, opts \\ []) do
     GenServer.start_link(__MODULE__, state, opts)
   end
@@ -17,7 +21,7 @@ defmodule Collector do
     {:noreply, state}
   end
 
-  defp schedule_task() do
+  defp schedule_task do
     Process.send_after(self(), :timeout_1, 1 * 500) # 0.5 second
 
     if File.regular?(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
@@ -32,7 +36,7 @@ defmodule Collector do
     # Logger.debug "#{inspect current_date}"
   end
 
-  defp task_read_channels() do
+  defp task_read_channels do
     aggr_channel = get_channels_aggr()
     case aggr_channel do
       {:error, reason} ->
@@ -47,11 +51,12 @@ defmodule Collector do
     end
   end
 
-  defp get_channels_aggr() do
+  defp get_channels_aggr do
     case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
       {:ok, db} ->
-        # Sqlitex.query(db, "SELECT count(*) as count, campaign_id, user_id, used_gateway_id " <>
-        #               " FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
+        # Sqlitex.query(db,
+        # "SELECT count(*) as count, campaign_id, user_id, used_gateway_id "
+        # <> "FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
         Sqlitex.query(db,
                       "SELECT count(*) as count, campaign_id, leg_type " <>
                       "FROM channels WHERE leg_type > 0 GROUP BY campaign_id, leg_type;")
@@ -61,17 +66,18 @@ defmodule Collector do
     end
   end
 
-  # defp get_channels_aggr_user() do
+  # defp get_channels_aggr_user do
   #   case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
   #     {:ok, db} ->
-  #       Sqlitex.query(db, "SELECT count(*) as count, user_id FROM channels GROUP BY user_id;")
+  #       Sqlitex.query(db,
+  #         "SELECT count(*) as count, user_id FROM channels GROUP BY user_id;")
   #     {:error, reason} ->
   #       Logger.error #{inspect reason}
   #       {:error}
   #   end
   # end
 
-  # defp get_channels_aggr_total() do
+  # defp get_channels_aggr_total do
   #   case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
   #     {:ok, db} ->
   #       Sqlitex.query(db, "SELECT count(*) as count FROM channels;")
