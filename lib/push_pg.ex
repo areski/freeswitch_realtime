@@ -3,7 +3,7 @@ defmodule PusherPG do
   require Logger
 
   alias Ecto.Adapters.SQL
-  alias FreeswitchRealtime.Repo
+  alias FSRealtime.Repo
 
   @moduledoc """
   GenServer Module to push Channels info to PostgreSQL.
@@ -35,7 +35,7 @@ defmodule PusherPG do
     end
     if querystring do
       SQL.query(Repo, querystring,
-                [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:freeswitch_realtime, :local_host)])
+                [channel_info[:count], channel_info[:campaign_id], Application.fetch_env!(:fs_realtime, :local_host)])
     end
   end
 

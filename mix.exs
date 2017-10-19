@@ -1,9 +1,9 @@
-defmodule FreeswitchRealtime.Mixfile do
+defmodule FSRealtime.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :freeswitch_realtime,
-     version: "0.4.0",
+    [app: :fs_realtime,
+     version: "0.4.1",
      elixir: "~> 1.5.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule FreeswitchRealtime.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [mod: {FreeswitchRealtime, []},
+    [mod: {FSRealtime, []},
      extra_applications: [:logger]]
   end
 
@@ -46,7 +46,7 @@ defmodule FreeswitchRealtime.Mixfile do
 
   defp package do
     [
-      name: :freeswitch_realtime,
+      name: :fs_realtime,
       license_file: "LICENSE",
       external_dependencies: [],
       maintainers: ["Areski Belaid"],

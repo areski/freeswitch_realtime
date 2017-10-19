@@ -17,11 +17,11 @@ If you wish to use this with an other project you might want to remove `campaign
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-1. Add `freeswitch_realtime` to your list of dependencies in `mix.exs`:
+1. Add `fs_realtime` to your list of dependencies in `mix.exs`:
 
     ```elixir
     def deps do
-      [{:freeswitch_realtime, "~> 0.1.0"}]
+      [{:fs_realtime, "~> 0.1.0"}]
     end
     ```
 
@@ -29,7 +29,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def application do
-      [applications: [:freeswitch_realtime]]
+      [applications: [:fs_realtime]]
     end
     ```
 

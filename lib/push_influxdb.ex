@@ -43,7 +43,7 @@ defmodule PushInfluxDB do
   """
   def write_points(chan_result) do
     series = Enum.map(chan_result, fn(x) -> parse_channels x end)
-    case series |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
+    case series |> FSRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         cnt = Enum.count(series)
         Logger.info "wrote #{cnt} points"
@@ -71,7 +71,7 @@ defmodule PushInfluxDB do
     serie = %{serie | tags: %{serie.tags |
       campaign_id: data[:campaign_id],
       leg_type: data[:leg_type],
-      host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
+      host: Application.fetch_env!(:fs_realtime, :local_host)}}
     serie = %{serie | fields: %{serie.fields | value: data[:count]}}
     serie
   end
@@ -98,10 +98,10 @@ defmodule PushInfluxDB do
       |> Enum.reduce(0, fn(x, acc) -> (x[:count] + acc) end)
     serie = %FSChannelsSeries{}
     serie = %{serie | tags: %{serie.tags | leg_type: leg_type,
-              host: Application.fetch_env!(:freeswitch_realtime, :local_host)}}
+              host: Application.fetch_env!(:fs_realtime, :local_host)}}
     serie = %{serie | fields: %{serie.fields | value: total_leg}}
 
-    case serie |> FreeswitchRealtime.InConnection.write([async: true, precision: :seconds]) do
+    case serie |> FSRealtime.InConnection.write([async: true, precision: :seconds]) do
       :ok ->
         Logger.info "wrote total: #{total_leg} on leg: #{leg_type}"
       _  ->

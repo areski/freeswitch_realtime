@@ -2,7 +2,7 @@ defmodule FSChannelsCampaignSeries do
   use Instream.Series
 
   series do
-    database    Application.fetch_env!(:freeswitch_realtime, :influxdatabase)
+    database    Application.fetch_env!(:fs_realtime, :influxdatabase)
     measurement "freeswitch_channels_cpg_total"
 
     tag :host, default: "127.0.0.1"
@@ -19,7 +19,7 @@ defmodule FSChannelsSeries do
   use Instream.Series
 
   series do
-    database    Application.fetch_env!(:freeswitch_realtime, :influxdatabase)
+    database    Application.fetch_env!(:fs_realtime, :influxdatabase)
     measurement "freeswitch_channels_total"
 
     tag :host, default: "127.0.0.1"

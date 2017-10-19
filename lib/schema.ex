@@ -1,4 +1,4 @@
-defmodule FreeswitchRealtime.CampaignRT do
+defmodule FSRealtime.CampaignRT do
   use Ecto.Schema
 
   # dialer_cdr is the DB table
@@ -10,7 +10,7 @@ defmodule FreeswitchRealtime.CampaignRT do
   end
 end
 
-# alias FreeswitchRealtime.Repo
-# alias FreeswitchRealtime.CampaignRT
+# alias FSRealtime.Repo
+# alias FSRealtime.CampaignRT
 # newrt = %CampaignRT{campaign_id: 1, current_channels_total: 20, updated_date: %Ecto.DateTime{year: 2015, month: 1, day: 23, hour: 23, min: 50, sec: 07, usec: 0}}
 # Repo.insert!(newrt)

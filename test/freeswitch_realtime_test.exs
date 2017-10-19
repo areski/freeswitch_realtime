@@ -1,6 +1,6 @@
-defmodule FreeswitchRealtimeTest do
+defmodule FSRealtimeTest do
   use ExUnit.Case
-  doctest FreeswitchRealtime
+  doctest FSRealtime
 
   test "the truth" do
     assert 1 + 1 == 2
