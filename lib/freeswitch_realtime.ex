@@ -33,7 +33,7 @@ defmodule FSRealtime do
     # for other strategies and supported options
     opts = [
       strategy: :one_for_one,
-      max_restarts: 10,
+      max_restarts: 100, max_seconds: 5,
       name: FSRealtime.Supervisor
     ]
     Supervisor.start_link(children, opts)

@@ -37,7 +37,7 @@ defmodule FSRealtime.Mixfile do
       # {:timex_ecto, "~> 3.0.5"},
       # {:tzdata, "~> 0.5.11"}
       {:mix_test_watch, "~> 0.5.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.8.7", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.8.10", only: [:dev, :test], runtime: false},
       # {:dogma, "~> 0.1", only: :dev},
     ]
   end

@@ -87,4 +87,13 @@ defmodule Collector do
   #   end
   # end
 
+  def terminate(_reason, state) do
+    # Do Shutdown Stuff
+    Logger.debug fn ->
+      "Going Down: #{inspect(state)}"
+    end
+    Process.sleep(1000) #:timer.sleep(1000)
+    :normal
+  end
+
 end
