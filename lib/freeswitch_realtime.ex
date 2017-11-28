@@ -7,30 +7,19 @@ defmodule FSRealtime do
   require Logger
   alias FSRealtime.InConnection
 
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     log_app_info()
 
-    # Define workers and child supervisors to be supervised
     children = [
-      # Starts worker by calling:FSRealtime.Worker.start_link(arg1, arg2, arg3)
-      # worker(FSRealtime.Worker, [arg1, arg2, arg3]),
-      supervisor(FSRealtime.Repo, []),
-      worker(Collector, [[], [name: MyCollector]]),
-      worker(PushInfluxDB, [0]),
-      worker(PusherPG, [0]),
-      # We dont use `Sqlitex.Server` as it's not possible to catch IO db errors
-      # worker(Sqlitex.Server,
-        # [Application.fetch_env!(:fs_realtime, :sqlite_db),
-        # [name: Sqlitex.Server]]),
+      FSRealtime.Repo,
+      Collector,
+      PushInfluxDB,
+      PusherPG,
       InConnection.child_spec,
     ]
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [
       strategy: :one_for_one,
       max_restarts: 100, max_seconds: 5,
