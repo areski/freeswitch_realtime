@@ -4,7 +4,7 @@ defmodule FSRealtime.Mixfile do
   def project do
     [
       app: :fs_realtime,
-      version: "0.6.0",
+      version: "0.7.0",
       elixir: "~> 1.6.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
