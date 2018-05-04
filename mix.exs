@@ -2,14 +2,15 @@ defmodule FSRealtime.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :fs_realtime,
-     version: "0.6.0",
-     elixir: "~> 1.6.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     description: description(),
-     package: package(),
+    [
+      app: :fs_realtime,
+      version: "0.6.0",
+      elixir: "~> 1.6.4",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      description: description(),
+      package: package()
     ]
   end
 
@@ -17,8 +18,7 @@ defmodule FSRealtime.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [mod: {FSRealtime, []},
-     extra_applications: [:logger]]
+    [mod: {FSRealtime, []}, extra_applications: [:logger]]
   end
 
   # Dependencies
@@ -37,7 +37,7 @@ defmodule FSRealtime.Mixfile do
       # {:timex_ecto, "~> 3.0.5"},
       # {:tzdata, "~> 0.5.11"}
       {:mix_test_watch, "~> 0.6.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false}
       # {:dogma, "~> 0.1", only: :dev},
     ]
   end

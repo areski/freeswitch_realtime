@@ -14,5 +14,4 @@ defmodule PushInfluxDBTest do
     # PushInfluxDB.create(genserver, "shopping")
     # assert {:ok, bucket} = PushInfluxDB.lookup(genserver, "shopping")
   end
-
 end

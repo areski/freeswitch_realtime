@@ -26,7 +26,8 @@ defmodule PushInfluxDB do
 
   """
   def push_aggr_channel(result) do
-    Logger.debug "pushing series..."
+    Logger.debug("pushing series...")
+
     case result do
       {:ok, chan_result} ->
         write_points(chan_result)
@@ -48,15 +49,18 @@ defmodule PushInfluxDB do
 
   """
   def write_points(chan_result) do
-    series = Enum.map(chan_result, fn(x) -> parse_channels x end)
-    case series |> InConnection.write([async: true, precision: :seconds]) do
+    series = Enum.map(chan_result, fn x -> parse_channels(x) end)
+
+    case series |> InConnection.write(async: true, precision: :seconds) do
       :ok ->
         cnt = Enum.count(series)
-        Logger.info "wrote #{cnt} points"
+        Logger.info("wrote #{cnt} points")
+
       {:error, :econnrefused} ->
-        Logger.error "error writing points"
-      _  ->
-        Logger.error "error writing points: #{inspect series}"
+        Logger.error("error writing points")
+
+      _ ->
+        Logger.error("error writing points: #{inspect(series)}")
     end
   end
 
@@ -74,10 +78,17 @@ defmodule PushInfluxDB do
   """
   def parse_channels(data) do
     serie = %FSChannelsCampaignSeries{}
-    serie = %{serie | tags: %{serie.tags |
-      campaign_id: data[:campaign_id],
-      leg_type: data[:leg_type],
-      host: Application.fetch_env!(:fs_realtime, :local_host)}}
+
+    serie = %{
+      serie
+      | tags: %{
+          serie.tags
+          | campaign_id: data[:campaign_id],
+            leg_type: data[:leg_type],
+            host: Application.fetch_env!(:fs_realtime, :local_host)
+        }
+    }
+
     serie = %{serie | fields: %{serie.fields | value: data[:count]}}
     serie
   end
@@ -99,19 +110,31 @@ defmodule PushInfluxDB do
   """
   def write_total(chan_result, leg_type \\ 1) do
     leg? = &(&1[:leg_type] == leg_type)
-    total_leg = chan_result
+
+    total_leg =
+      chan_result
       |> Enum.filter(leg?)
-      |> Enum.reduce(0, fn(x, acc) -> (x[:count] + acc) end)
+      |> Enum.reduce(0, fn x, acc -> x[:count] + acc end)
+
     serie = %FSChannelsSeries{}
-    serie = %{serie | tags: %{serie.tags | leg_type: leg_type,
-              host: Application.fetch_env!(:fs_realtime, :local_host)}}
+
+    serie = %{
+      serie
+      | tags: %{
+          serie.tags
+          | leg_type: leg_type,
+            host: Application.fetch_env!(:fs_realtime, :local_host)
+        }
+    }
+
     serie = %{serie | fields: %{serie.fields | value: total_leg}}
 
-    case serie |> InConnection.write([async: true, precision: :seconds]) do
+    case serie |> InConnection.write(async: true, precision: :seconds) do
       :ok ->
-        Logger.info "wrote total: #{total_leg} on leg: #{leg_type}"
-      _  ->
-        Logger.error "error writing total"
+        Logger.info("wrote total: #{total_leg} on leg: #{leg_type}")
+
+      _ ->
+        Logger.error("error writing total")
     end
   end
 

@@ -17,14 +17,16 @@ defmodule FSRealtime do
       Collector,
       PushInfluxDB,
       PusherPG,
-      InConnection.child_spec,
+      InConnection.child_spec()
     ]
 
     opts = [
       strategy: :one_for_one,
-      max_restarts: 100, max_seconds: 5,
+      max_restarts: 100,
+      max_seconds: 5,
       name: FSRealtime.Supervisor
     ]
+
     Supervisor.start_link(children, opts)
   end
 
@@ -34,12 +36,17 @@ defmodule FSRealtime do
   def log_app_info do
     {:ok, vsn} = :application.get_key(:fs_realtime, :vsn)
     app_version = List.to_string(vsn)
-    {_, _, ex_ver} = List.keyfind(:application.which_applications, :elixir, 0)
+    {_, _, ex_ver} = List.keyfind(:application.which_applications(), :elixir, 0)
     erl_version = :erlang.system_info(:otp_release)
-    Logger.error "[starting] fs_realtime (app_version:#{app_version} - "
-      <> "ex_ver:#{ex_ver} - erl_version:#{erl_version})"
-    Logger.info "[init] we will collect channels information from "
-      <> Application.fetch_env!(:fs_realtime, :sqlite_db)
-  end
 
+    Logger.error(
+      "[starting] fs_realtime (app_version:#{app_version} - " <>
+        "ex_ver:#{ex_ver} - erl_version:#{erl_version})"
+    )
+
+    Logger.info(
+      "[init] we will collect channels information from " <>
+        Application.fetch_env!(:fs_realtime, :sqlite_db)
+    )
+  end
 end

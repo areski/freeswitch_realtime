@@ -7,10 +7,10 @@ defmodule FSRealtime.CampaignRT do
 
   # dialer_cdr is the DB table
   schema "dialer_campaign_rtinfo" do
-    field :campaign_id,             :integer, default: 0
-    field :host,                    :string
-    field :current_channels_total,  :integer, default: 0
-    field :updated_date,            :naive_datetime
+    field(:campaign_id, :integer, default: 0)
+    field(:host, :string)
+    field(:current_channels_total, :integer, default: 0)
+    field(:updated_date, :naive_datetime)
   end
 end
 
