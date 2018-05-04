@@ -1,7 +1,22 @@
 language: elixir
+sudo: false
 
 elixir:
-     - 1.3.0
+  - 1.6.4
+  - 1.5.0
 
 otp_release:
-     - 19.0
+  - 20.1
+  - 19.3
+
+notifications:
+  recipients:
+    - areski@gmail.com
+
+script:
+  - if [[ `elixir -v` = *"1.6"* ]]; then mix format --check-formatted; fi
+  - mix test
+
+after_script:
+  - mix deps.get --only docs
+  - MIX_ENV=docs mix inch.report
