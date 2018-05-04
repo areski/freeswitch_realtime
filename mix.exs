@@ -4,7 +4,7 @@ defmodule FSRealtime.Mixfile do
   def project do
     [app: :fs_realtime,
      version: "0.6.0",
-     elixir: "~> 1.5.1",
+     elixir: "~> 1.6.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
@@ -24,20 +24,20 @@ defmodule FSRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-      {:ex_doc, "~> 0.18.1", only: :dev},
+      {:ex_doc, "~> 0.18.3", only: :dev},
       {:distillery, "~> 1.5.2"},
       # {:sqlitex, path: "../sqlitex"},
       {:sqlitex, "~> 1.3.3"},
-      {:ecto, "~> 2.2.6"},
+      {:ecto, "~> 2.2.10"},
       {:postgrex, ">= 0.0.0"},
       {:logger_file_backend, "0.0.10"},
-      {:instream, "~> 0.16"},
+      {:instream, "~> 0.17.1"},
       {:swab, github: "crownedgrouse/swab", branch: "master"},
       # {:timex, "~> 3.1.9"},
       # {:timex_ecto, "~> 3.0.5"},
       # {:tzdata, "~> 0.5.11"}
-      {:mix_test_watch, "~> 0.5.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.8.10", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 0.6.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false},
       # {:dogma, "~> 0.1", only: :dev},
     ]
   end

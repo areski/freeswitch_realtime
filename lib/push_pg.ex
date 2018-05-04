@@ -13,6 +13,10 @@ defmodule PusherPG do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
+  def init(args) do
+    {:ok, args}
+  end
+
   @doc """
   Update Campaign Channels information
 

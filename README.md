@@ -13,33 +13,42 @@ Channels information are pushed in the form of:
 If you wish to use this with an other project you might want to remove `campaign_id` which is specific to [Newfies-Dialer](https://www.newfies-dialer.org/).
 
 
+## Usage Dev
+
+Run dev:
+
+  MIX_ENV=dev iex -S mix
+
+Check outdated deps:
+
+  mix hex.outdated
+
+
+## Usage Test
+
+Run test.watch:
+
+  MIX_ENV=dev mix test.watch
+
+
+## Usage Prod
+
+Compile and release:
+
+  MIX_ENV=prod mix compile
+  # MIX_ENV=prod mix release.init
+  MIX_ENV=prod mix release --verbose
+
+
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-1. Add `fs_realtime` to your list of dependencies in `mix.exs`:
-
-    ```elixir
-    def deps do
-      [{:fs_realtime, "~> 0.1.0"}]
-    end
-    ```
-
-2. Ensure `freeswitch_realtime` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:fs_realtime]]
-    end
-    ```
-
-3. Create directory for logs:
+1. Create directory for logs:
 
     ```
     mkdir /var/log/freeswitch_realtime
     ```
 
-4. Add host in your `/etc/hosts` eg:
+2. Add host in your `/etc/hosts` eg:
 
     ```
     127.0.0.1     influxdb_host
@@ -58,6 +67,23 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 3. Build release:
 
     MIX_ENV=prod mix release
+
+
+## Run tests
+
+You will need to install inotify-tools to use `mix test.watch`.
+`mix test.watch` will automatically run your Elixir project's tests each
+time you save a file (https://github.com/lpil/mix-test.watch)
+
+You will need [inotify-tools](https://github.com/rvoicilas/inotify-tools/wiki)
+installed.
+
+
+## Code linter
+
+We use [Credo](https://github.com/rrrene/credo) as colinter
+
+    mix credo
 
 
 ## Start on reboot
@@ -104,4 +130,4 @@ List of improvements and tasks,
 
 - [ ] use [conform](https://github.com/bitwalker/conform) to support config file
 - [ ] add inch_ex
-- [ ] add credo - https://github.com/rrrene/credo
+- [x] add credo - https://github.com/rrrene/credo
