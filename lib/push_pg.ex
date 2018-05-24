@@ -78,13 +78,12 @@ defmodule PusherPG do
         [count: 3, campaign_id: 2, leg_type: 1]])
       :ok
   """
-  @spec apply_campaign_rt_update_map([[{atom, integer}]]) :: :ok
+  @spec apply_campaign_rt_update_map([[{atom, integer}]]) :: [any()]
   def apply_campaign_rt_update_map(aggr_channel) when is_list(aggr_channel) and length(aggr_channel) > 0 do
-    Enum.map(aggr_channel, &raw_update_campaign_rt/1)
-    :ok
+    aggr_channel |> Enum.map(&raw_update_campaign_rt/1)
   end
   def apply_campaign_rt_update_map(_) do
-    :ok
+    []
   end
 
   @doc """
@@ -95,7 +94,7 @@ defmodule PusherPG do
   end
 
   def handle_cast({:update_campaign_rt, result}, state) do
-    :ok = apply_campaign_rt_update_map(result)
+    apply_campaign_rt_update_map(result)
     {:noreply, state}
   end
 

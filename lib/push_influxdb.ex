@@ -129,7 +129,9 @@ defmodule PushInfluxDB do
 
     case serie |> InConnection.write(async: true, precision: :seconds) do
       :ok ->
-        Logger.debug("total: #{total_leg} on leg: #{leg_type}")
+        Logger.debug(fn ->
+          "total: #{total_leg} on leg: #{leg_type}"
+        end)
 
       _ ->
         Logger.error("error writing total")
