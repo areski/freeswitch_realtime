@@ -19,6 +19,9 @@ erl_crash.dump
 # Releases
 /rel
 
+# Docs
+/docs
+
 #custom
 config/private.exs%
 release-me.sh

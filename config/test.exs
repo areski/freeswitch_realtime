@@ -64,7 +64,9 @@ config :fs_realtime,
 # Push to PostgreSQL
 config :fs_realtime, FSRealtime.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "postgres://DBUSERNAME:DBPASSWORD@DBHOST/DBNAME"
+  url: "postgres://postgres:password@localhost/newfiesdb",
+  pool_size: 10,
+  pool: Ecto.Adapters.SQL.Sandbox
 
 # Push to InfluxDB
 config :fs_realtime, FSRealtime.InConnection,

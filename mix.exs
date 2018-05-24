@@ -5,7 +5,7 @@ defmodule FSRealtime.Mixfile do
     [
       app: :fs_realtime,
       version: "0.7.0",
-      elixir: "~> 1.6.4",
+      elixir: "~> 1.6.5",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -37,7 +37,8 @@ defmodule FSRealtime.Mixfile do
       # {:timex_ecto, "~> 3.0.5"},
       # {:tzdata, "~> 0.5.11"}
       {:mix_test_watch, "~> 0.6.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 0.9.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
       # {:dogma, "~> 0.1", only: :dev},
     ]
   end

@@ -3,80 +3,97 @@ defmodule Collector do
   require Logger
 
   @moduledoc """
-  Collector module is in charge of orchestrating the collection and push of Channels info.
+  Collector module is in charge of collecting and pushing of channels info
   """
+
+  @loop_interval 500
 
   def start_link(state, opts \\ []) do
     GenServer.start_link(__MODULE__, state, opts)
   end
 
   def init(state) do
-    # 0.5 second
-    Process.send_after(self(), :timeout_1, 1 * 500)
+    Process.send_after(self(), :timeout_loop, @loop_interval)
     {:ok, state}
   end
 
-  def handle_info(:timeout_1, state) do
-    # Do the work you desire here
-    # Reschedule once more
+  def handle_info(:timeout_loop, state) do
+    still_alive()
     schedule_task()
-    {:noreply, state}
+    # current_date = :os.timestamp |> :calendar.now_to_datetime
+    # IO.inspect(current_date)
+
+    # loop in 0.5 seconds
+    Process.send_after(self(), :timeout_loop, @loop_interval)
+
+    # {:noreply, state}
+    {:noreply, [], state}
   end
 
+  @doc false
+  def handle_info(_, state) do
+    {:noreply, [], state}
+  end
+
+  @spec schedule_task :: :ok
   defp schedule_task do
-    # 0.5 second
-    Process.send_after(self(), :timeout_1, 1 * 500)
 
     if File.regular?(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
-      # Dispatch Task
-      task_read_channels()
+      process_channels()
     else
       Logger.error(
-        "sqlite database not found: " <> Application.fetch_env!(:fs_realtime, :sqlite_db)
+        "sqlite db not found: " <> Application.fetch_env!(:fs_realtime, :sqlite_db)
       )
     end
 
     # current_date = :os.timestamp |> :calendar.now_to_datetime
     # Logger.debug "#{inspect current_date}"
+    :ok
   end
 
-  defp task_read_channels do
-    aggr_channel = get_channels_aggr()
-
-    case aggr_channel do
-      {:error, reason} ->
-        Logger.error(reason)
-
-      {:ok, []} ->
-        Logger.info("aggregate channels is empty []")
-
-      {:ok, nil} ->
-        Logger.info("aggregate channels is nil")
-
-      {:ok, _} ->
-        PushInfluxDB.push_aggr_channel(aggr_channel)
-        PusherPG.update_campaign_rt(aggr_channel)
+  def still_alive do
+    randint = :rand.uniform(10)
+    if randint <= 1 do
+      Logger.info("still alive...")
     end
   end
 
+  @doc """
+  Task that read channels info and push it to InfluxDB & PG
+
+  ## Examples
+
+      iex> {:ok, :bingo}
+      {:ok, :bingo}
+
+  """
+  @spec process_channels :: :ok
+  defp process_channels do
+    with {:ok, aggr_channel} <- get_channels_aggr(),
+         # :ok <- Logger.info("#{inspect aggr_channel}"),
+         :ok <- PushInfluxDB.async_push_aggr_channel(aggr_channel),
+         # :ok <- Logger.info("after async_push_aggr_channel"),
+         do: {:ok, PusherPG.async_update_campaign_rt(aggr_channel)}
+    :ok
+  end
+
+  @doc false
+  @spec get_channels_aggr :: {:ok, binary} | {:error, any()}
   defp get_channels_aggr do
     case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
       {:ok, db} ->
-        # Sqlitex.query(db,
-        # "SELECT count(*) as count, campaign_id, user_id, used_gateway_id "
-        # <> "FROM channels GROUP BY campaign_id, user_id, used_gateway_id;")
         Sqlitex.query(
           db,
           "SELECT count(*) as count, campaign_id, leg_type " <>
             "FROM channels WHERE leg_type > 0 GROUP BY campaign_id, leg_type;"
         )
-
       {:error, reason} ->
         Logger.error(reason)
         {:error, reason}
     end
   end
 
+  # @doc false
   # defp get_channels_aggr_user do
   #   case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
   #     {:ok, db} ->
@@ -88,6 +105,7 @@ defmodule Collector do
   #   end
   # end
 
+  # @doc false
   # defp get_channels_aggr_total do
   #   case Sqlitex.open(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
   #     {:ok, db} ->

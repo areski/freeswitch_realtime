@@ -19,22 +19,23 @@ defmodule PushInfluxDB do
 
   ## Examples
 
-      iex> PushInfluxDB.push_aggr_channel({:ok,
+      iex> PushInfluxDB.push_aggr_channel(
         [[count: 3, campaign_id: 1, leg_type: 1],
-        [count: 3, campaign_id: 2, leg_type: 1]]})
+        [count: 3, campaign_id: 2, leg_type: 1]])
       :ok
 
   """
-  def push_aggr_channel(result) do
+  def push_aggr_channel(chan_result) when is_list(chan_result) and length(chan_result) > 0 do
     Logger.debug("pushing series...")
+    write_points(chan_result)
+    # Write total to influxDB for both Legs
+    write_total(chan_result, 1)
+    write_total(chan_result, 2)
+    {:ok, :pushed}
+  end
 
-    case result do
-      {:ok, chan_result} ->
-        write_points(chan_result)
-        # Write total to influxDB for both Legs
-        write_total(chan_result, 1)
-        write_total(chan_result, 2)
-    end
+  def push_aggr_channel(_)  do
+    {:ok, nil}
   end
 
   @doc """
@@ -54,13 +55,10 @@ defmodule PushInfluxDB do
     case series |> InConnection.write(async: true, precision: :seconds) do
       :ok ->
         cnt = Enum.count(series)
-        Logger.info("wrote #{cnt} points")
+        Logger.info("#{cnt} points")
 
-      {:error, :econnrefused} ->
-        Logger.error("error writing points")
-
-      _ ->
-        Logger.error("error writing points: #{inspect(series)}")
+      {:error, reason} ->
+        Logger.error("error writing points - #{reason}")
     end
   end
 
@@ -131,45 +129,23 @@ defmodule PushInfluxDB do
 
     case serie |> InConnection.write(async: true, precision: :seconds) do
       :ok ->
-        Logger.info("wrote total: #{total_leg} on leg: #{leg_type}")
+        Logger.debug("total: #{total_leg} on leg: #{leg_type}")
 
       _ ->
         Logger.error("error writing total")
     end
   end
 
-  def push(item) do
-    GenServer.cast(__MODULE__, {:push, item})
+  @doc """
+  Async Push channels
+  """
+  def async_push_aggr_channel(result) do
+    GenServer.cast(__MODULE__, {:push_aggr_channel, result})
   end
 
-  def pop do
-    GenServer.call(__MODULE__, :pop)
+  def handle_cast({:push_aggr_channel, result}, state) do
+    {:ok, _} = push_aggr_channel(result)
+    {:noreply, state}
   end
 
-  # def lookup(item) do
-  #  :error
-  # end
-
-  # Server (callbacks)
-  # Sync
-  def handle_call(:pop, _from, []) do
-    {:reply, [], []}
-  end
-
-  def handle_call(:pop, _from, [h | t]) do
-    {:reply, h, t}
-  end
-
-  # def handle_call(request, from, state) do
-  #   # Call the default implementation from GenServer
-  #   super(request, from, state)
-  # end
-
-  def handle_cast({:push, item}, state) do
-    {:noreply, [item | state]}
-  end
-
-  # def handle_cast(request, state) do
-  #   super(request, state)
-  # end
 end
