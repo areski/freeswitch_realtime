@@ -38,14 +38,16 @@ config :logger,
 config :logger, :error_log,
   path: "/var/log/freeswitch_realtime/error.log",
   level: :warn,
-  format: "$date $time $metadata[$level] $levelpad$message\n"
+  format: "$date $time $metadata[$level] $levelpad$message\n",
+  compile_time_purge_level: :error
   # metadata: [:file, :line]
 
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
   path: "/var/log/freeswitch_realtime/debug.log",
   level: :info,
-  format: "$date $time $metadata[$level] $levelpad$message\n"
+  format: "$date $time $metadata[$level] $levelpad$message\n",
+  compile_time_purge_level: :debug
   # metadata: [:file, :line]
 
 
