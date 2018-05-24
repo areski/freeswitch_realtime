@@ -2,14 +2,16 @@ defmodule PusherPGTest do
   use ExUnit.Case, async: true
   # doctest Collector
   alias FSRealtime.Repo
+  alias Ecto.Adapters.SQL.Sandbox
+  alias Ecto.Adapters.SQL
 
   setup do
     # Explicitly get a connection before each test
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    :ok = Sandbox.checkout(Repo)
   end
 
   test "raw query" do
-    result = Ecto.Adapters.SQL.query!(Repo, "SELECT NOW()")
+    result = SQL.query!(Repo, "SELECT NOW()")
     assert result.num_rows == 1
   end
 

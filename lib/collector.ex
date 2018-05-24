@@ -37,13 +37,10 @@ defmodule Collector do
 
   @spec schedule_task :: :ok
   defp schedule_task do
-
     if File.regular?(Application.fetch_env!(:fs_realtime, :sqlite_db)) do
       process_channels()
     else
-      Logger.error(
-        "sqlite db not found: " <> Application.fetch_env!(:fs_realtime, :sqlite_db)
-      )
+      Logger.error("sqlite db not found: " <> Application.fetch_env!(:fs_realtime, :sqlite_db))
     end
 
     # current_date = :os.timestamp |> :calendar.now_to_datetime
@@ -53,6 +50,7 @@ defmodule Collector do
 
   def still_alive do
     randint = :rand.uniform(10)
+
     if randint <= 1 do
       Logger.info("still alive...")
     end
@@ -74,6 +72,7 @@ defmodule Collector do
          :ok <- PushInfluxDB.async_push_aggr_channel(aggr_channel),
          # :ok <- Logger.info("after async_push_aggr_channel"),
          do: {:ok, PusherPG.async_update_campaign_rt(aggr_channel)}
+
     :ok
   end
 
@@ -87,6 +86,7 @@ defmodule Collector do
           "SELECT count(*) as count, campaign_id, leg_type " <>
             "FROM channels WHERE leg_type > 0 GROUP BY campaign_id, leg_type;"
         )
+
       {:error, reason} ->
         Logger.error(reason)
         {:error, reason}

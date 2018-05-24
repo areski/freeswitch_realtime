@@ -25,7 +25,7 @@ defmodule PusherPG do
       iex> PusherPG.build_query_update_rtinfo(1)
       INSERT INTO dialer_campaign_rtinfo (current_channels_aleg, current_channels_bleg, campaign_id, host, created_date, updated_date) VALUES ($1, 0, $2, $3, NOW(), NOW()) ON CONFLICT (campaign_id, host) DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()
   """
-  @spec build_query_update_rtinfo(integer) :: String.t | charlist
+  @spec build_query_update_rtinfo(integer) :: String.t() | charlist
   def build_query_update_rtinfo(leg_type) when leg_type == 1 do
     "INSERT INTO dialer_campaign_rtinfo \
         (current_channels_aleg, current_channels_bleg, campaign_id, host, \
@@ -33,6 +33,7 @@ defmodule PusherPG do
         ON CONFLICT (campaign_id, host) \
         DO UPDATE SET current_channels_aleg = $1, updated_date=NOW()"
   end
+
   def build_query_update_rtinfo(leg_type) when leg_type == 2 do
     "INSERT INTO dialer_campaign_rtinfo \
         (current_channels_aleg, current_channels_bleg, campaign_id, host, \
@@ -40,6 +41,7 @@ defmodule PusherPG do
         ON CONFLICT (campaign_id, host) \
         DO UPDATE SET current_channels_bleg = $1, bleg_updated_date=NOW()"
   end
+
   def build_query_update_rtinfo(_), do: false
 
   @doc """
@@ -50,7 +52,6 @@ defmodule PusherPG do
       iex> PusherPG.raw_update_campaign_rt([count: 3, campaign_id: 1, leg_type: 1])
       :ok
   """
-  # @spec raw_update_campaign_rt([{atom, term}]) :: {:ok, binary} | {:error, any()}
   @spec raw_update_campaign_rt([{atom, integer}]) :: {:ok, binary} | {:error, any()}
   def raw_update_campaign_rt(channel_info) do
     Logger.debug(fn ->
@@ -58,6 +59,7 @@ defmodule PusherPG do
     end)
 
     querystring = build_query_update_rtinfo(channel_info[:leg_type])
+
     if querystring do
       SQL.query(Repo, querystring, [
         channel_info[:count],
@@ -79,9 +81,11 @@ defmodule PusherPG do
       :ok
   """
   @spec apply_campaign_rt_update_map([[{atom, integer}]]) :: [any()]
-  def apply_campaign_rt_update_map(aggr_channel) when is_list(aggr_channel) and length(aggr_channel) > 0 do
+  def apply_campaign_rt_update_map(aggr_channel)
+      when is_list(aggr_channel) and length(aggr_channel) > 0 do
     aggr_channel |> Enum.map(&raw_update_campaign_rt/1)
   end
+
   def apply_campaign_rt_update_map(_) do
     []
   end
@@ -97,5 +101,4 @@ defmodule PusherPG do
     apply_campaign_rt_update_map(result)
     {:noreply, state}
   end
-
 end

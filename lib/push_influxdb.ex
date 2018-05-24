@@ -34,7 +34,7 @@ defmodule PushInfluxDB do
     {:ok, :pushed}
   end
 
-  def push_aggr_channel(_)  do
+  def push_aggr_channel(_) do
     {:ok, nil}
   end
 
@@ -149,5 +149,4 @@ defmodule PushInfluxDB do
     {:ok, _} = push_aggr_channel(result)
     {:noreply, state}
   end
-
 end
