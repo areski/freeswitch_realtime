@@ -92,7 +92,7 @@ Add freeswitch_realtime to `systemd` on Debian 8.x:
     systemctl daemon-reload
     systemctl restart freeswitch_realtime.service
 
-## Troubleshoot
+## Troubleshooting
 
 Ensure InfluxDB is working properly.
 
