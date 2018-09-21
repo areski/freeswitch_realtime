@@ -115,10 +115,3 @@ With to database `newfiesdialer` serie `freeswitch_channels_cpg_total`:
 Read from serie `freeswitch_channels_cpg_total`:
 
     curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=newfiesdialer" --data-urlencode "q=SELECT \"value\" FROM \"freeswitch_channels_cpg_total\""
-
-## Todo
-
-List of improvements and tasks,
-
-- [ ] use [conform](https://github.com/bitwalker/conform) to support config file || see new Conf in Elixir 1.7?
-- [x] add credo - https://github.com/rrrene/credo
