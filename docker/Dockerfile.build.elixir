@@ -1,11 +1,10 @@
-FROM jessie_elixir16
+FROM jessie_elixir173
 # replaced by custom image using Jessie
-# FROM elixir:1.6.6
+# FROM elixir:1.7.3
 
 MAINTAINER Areski <areski@gmail.com>
 
-ENV REFRESHED_AT 2018-07-09
-# 2017-01-15 update to elixir 1.6.6
+ENV REFRESHED_AT 2018-09-08
 
 # Install hex
 RUN /usr/local/bin/mix local.hex --force && \

@@ -1,6 +1,5 @@
 # Collect Realtime information from FreeSWITCH to Influxdb & PostgreSQL [![Build Status](https://travis-ci.org/areski/freeswitch_realtime.svg?branch=master)](https://travis-ci.org/areski/freeswitch_realtime)
 
-
 Collect Realtime information from [FreeSWITCH](https://freeswitch.org/) to [InfluxDB](https://influxdata.com/) & PostgreSQL.
 
 Channels information are pushed in the form of:
