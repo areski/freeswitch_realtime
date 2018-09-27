@@ -126,4 +126,10 @@ defmodule Collector do
     Process.sleep(1000)
     :normal
   end
+
+  # catch for others handle_event
+  def handle_event(event, state) do
+    Logger.error("Collector: Got not expected handle_event: #{inspect(event)}")
+    {:ok, state}
+  end
 end

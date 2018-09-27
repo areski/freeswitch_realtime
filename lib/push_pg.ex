@@ -101,4 +101,21 @@ defmodule PusherPG do
     apply_campaign_rt_update_map(result)
     {:noreply, state}
   end
+
+
+  def terminate(_reason, state) do
+    # Do Shutdown Stuff
+    Logger.error(fn ->
+      "terminate - going down - #{inspect(state)}"
+    end)
+
+    Process.sleep(1000)
+    :normal
+  end
+
+  # catch for others handle_event
+  def handle_event(event, state) do
+    Logger.error("PusherPG: Got not expected handle_event: #{inspect(event)}")
+    {:ok, state}
+  end
 end
