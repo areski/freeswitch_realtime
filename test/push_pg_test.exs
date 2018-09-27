@@ -1,9 +1,9 @@
 defmodule PusherPGTest do
   use ExUnit.Case, async: true
   # doctest Collector
-  alias FSRealtime.Repo
-  alias Ecto.Adapters.SQL.Sandbox
   alias Ecto.Adapters.SQL
+  alias Ecto.Adapters.SQL.Sandbox
+  alias FSRealtime.Repo
 
   setup do
     # Explicitly get a connection before each test
