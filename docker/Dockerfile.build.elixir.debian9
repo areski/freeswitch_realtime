@@ -2,7 +2,7 @@ FROM elixir:1.7
 
 MAINTAINER Areski <areski@gmail.com>
 
-ENV REFRESHED_AT 2018-09-08
+ENV REFRESHED_AT 2019-02-25
 
 # Install hex
 RUN /usr/local/bin/mix local.hex --force && \
