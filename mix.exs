@@ -5,7 +5,7 @@ defmodule FSRealtime.Mixfile do
     [
       app: :fs_realtime,
       version: "0.10.0",
-      elixir: "~> 1.7.3",
+      elixir: "> 1.9.0",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -24,20 +24,20 @@ defmodule FSRealtime.Mixfile do
   # Dependencies
   defp deps do
     [
-      {:ex_doc, "~> 0.19.1", only: :dev},
-      {:distillery, "~> 2.0.10"},
+      {:ex_doc, "~> 0.21.3", only: :dev},
+      {:distillery, "~> 2.1.1"},
       # {:sqlitex, path: "../sqlitex"},
-      {:sqlitex, "~> 1.4.3"},
+      {:sqlitex, "~> 1.7.0"},
       {:ecto, "~> 2.2.10"},
       {:postgrex, ">= 0.0.0"},
-      {:logger_file_backend, "0.0.10"},
-      {:instream, "~> 0.18.0"},
+      {:logger_file_backend, "0.0.11"},
+      {:instream, "~> 0.22.0"},
       {:swab, github: "crownedgrouse/swab", branch: "master"},
       # {:timex, "~> 3.1.9"},
       # {:timex_ecto, "~> 3.0.5"},
       # {:tzdata, "~> 0.5.11"}
-      {:mix_test_watch, "~> 0.9.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.10.2", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.0.2", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.2.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
       # {:dogma, "~> 0.1", only: :dev},
     ]
