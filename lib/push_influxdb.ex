@@ -52,7 +52,7 @@ defmodule PushInfluxDB do
   def write_points(chan_result) do
     series = Enum.map(chan_result, fn x -> parse_channels(x) end)
 
-    case series |> InConnection.write(async: true, precision: :seconds) do
+    case series |> InConnection.write(async: true, precision: :second) do
       :ok ->
         cnt = Enum.count(series)
         Logger.info("#{cnt} points")
@@ -127,7 +127,7 @@ defmodule PushInfluxDB do
 
     serie = %{serie | fields: %{serie.fields | value: total_leg}}
 
-    case serie |> InConnection.write(async: true, precision: :seconds) do
+    case serie |> InConnection.write(async: true, precision: :second) do
       :ok ->
         Logger.debug(fn ->
           "total: #{total_leg} on leg: #{leg_type}"

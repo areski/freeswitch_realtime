@@ -31,23 +31,23 @@ use Mix.Config
 
 # tell logger to load a LoggerFileBackend processes
 config :logger,
-  backends: [{LoggerFileBackend, :error_log},
-             {LoggerFileBackend, :debug_log}]
+  backends: [{LoggerFileBackend, :error_log}, {LoggerFileBackend, :debug_log}]
 
 # configuration for the {LoggerFileBackend, :error_log} backend
 config :logger, :error_log,
   path: "/tmp/error.log",
   level: :warn,
   format: "$date $time $metadata[$level] $levelpad$message\n"
-  # metadata: [:file, :line]
+
+# metadata: [:file, :line]
 
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
   path: "/tmp/debug.log",
   level: :info,
   format: "$date $time $metadata[$level] $levelpad$message\n"
-  # metadata: [:file, :line]
 
+# metadata: [:file, :line]
 
 # config :logger,
 #   backends: [:console],
@@ -58,21 +58,22 @@ config :logger, :debug_log,
 
 config :fs_realtime,
   sqlite_db: "/dev/shm/core.db",
-  influxdatabase:  "newfiesdialer",
+  influxdatabase: "newfiesdialer",
   local_host: "LOCAL_IP"
 
-# Push to PostgreSQL
+config :fs_realtime, ecto_repos: [FSRealtime.Repo]
+
+# DB access
 config :fs_realtime, FSRealtime.Repo,
-  adapter: Ecto.Adapters.Postgres,
   url: "postgres://postgres:password@localhost/newfiesdb",
   pool_size: 10,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # Push to InfluxDB
 config :fs_realtime, FSRealtime.InConnection,
-  host:      "localhost",
+  host: "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
-  pool:      [ max_overflow: 0, size: 1 ],
-  port:      8086,
-  scheme:    "http",
-  writer:    Instream.Writer.Line
+  pool: [max_overflow: 0, size: 1],
+  port: 8086,
+  scheme: "http",
+  writer: Instream.Writer.Line

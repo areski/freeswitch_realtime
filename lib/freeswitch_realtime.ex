@@ -13,7 +13,7 @@ defmodule FSRealtime do
     log_app_info()
 
     children = [
-      FSRealtime.Repo,
+      supervisor(FSRealtime.Repo, []),
       Collector,
       PushInfluxDB,
       PusherPG,
