@@ -1,9 +1,10 @@
 
 For Debian9 we can use the images from docker hub
-https://hub.docker.com/_/elixir/
 
-$ docker pull elixir:1.7
+docker pull erlang
 
-Check is well installed:
+>> FROM erlang:22
+If using buster
 
-$ docker run -it --rm elixir:1.7
+>> FROM erlang:21
+If using strech
