@@ -1,5 +1,5 @@
-FROM jessie_elixir110
-# replaced by custom image using Jessie
+FROM strech_elixir110
+# replaced by custom image
 # FROM elixir:1.7
 
 MAINTAINER Areski <areski@gmail.com>
