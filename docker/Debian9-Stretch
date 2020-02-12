@@ -7,4 +7,4 @@ docker pull erlang
 If using buster
 
 >> FROM erlang:21
-If using strech
+If using stretch

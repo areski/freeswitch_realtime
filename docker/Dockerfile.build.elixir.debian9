@@ -1,4 +1,4 @@
-FROM strech_elixir110
+FROM stretch_elixir110
 # replaced by custom image
 # FROM elixir:1.7
 

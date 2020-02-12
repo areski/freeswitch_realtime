@@ -1,8 +1,8 @@
-FROM erlang:21
+FROM stretch_erlang22
 
 #
 # Built with:
-# docker build --tag=strech_elixir110 -f docker/Dockerfile.Strech.Elixir110 .
+# docker build --tag=stretch_elixir110 -f docker/Dockerfile.Stretch.Elixir110 .
 #
 
 # elixir expects utf8.
