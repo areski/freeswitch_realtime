@@ -5,15 +5,12 @@ defmodule Collector do
   @moduledoc """
   Collector module is in charge of collecting and pushing of channels info
   """
-
-  @loop_interval 2000
-
   def start_link(state, opts \\ []) do
     GenServer.start_link(__MODULE__, state, opts)
   end
 
   def init(state) do
-    Process.send_after(self(), :timeout_loop, @loop_interval)
+    Process.send_after(self(), :timeout_loop, 1000)
     {:ok, state}
   end
 
@@ -23,8 +20,9 @@ defmodule Collector do
     # current_date = :os.timestamp |> :calendar.now_to_datetime
     # IO.inspect(current_date)
 
-    # loop in 0.5 seconds
-    Process.send_after(self(), :timeout_loop, @loop_interval)
+    # loop in 0.x seconds
+    heartbeat = Application.fetch_env!(:fs_realtime, :heartbeat)
+    Process.send_after(self(), :timeout_loop, heartbeat)
 
     # {:noreply, state}
     {:noreply, [], state}

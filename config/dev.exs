@@ -61,7 +61,8 @@ config :logger, :debug_log,
 config :fs_realtime,
   sqlite_db: "/home/areski/private/bitbucket/newfies-dialer/playground/channels/coredb.sqlite",
   influxdatabase: "newfiesdialer",
-  local_host: "127.0.0.1"
+  local_host: "127.0.0.1",
+  heartbeat: 2000
 
 config :fs_realtime, ecto_repos: [FSRealtime.Repo]
 

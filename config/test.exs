@@ -59,7 +59,8 @@ config :logger, :debug_log,
 config :fs_realtime,
   sqlite_db: "/dev/shm/core.db",
   influxdatabase: "newfiesdialer",
-  local_host: "LOCAL_IP"
+  local_host: "LOCAL_IP",
+  heartbeat: 2000
 
 config :fs_realtime, ecto_repos: [FSRealtime.Repo]
 

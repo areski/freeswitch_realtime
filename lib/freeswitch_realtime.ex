@@ -38,10 +38,12 @@ defmodule FSRealtime do
     app_version = List.to_string(vsn)
     {_, _, ex_ver} = List.keyfind(:application.which_applications(), :elixir, 0)
     erl_version = :erlang.system_info(:otp_release)
+    heartbeat = Application.fetch_env!(:fs_realtime, :heartbeat)
 
     Logger.error(
       "[starting] fs_realtime (app_version:#{app_version} - " <>
-        "ex_ver:#{ex_ver} - erl_version:#{erl_version})"
+        "ex_ver:#{ex_ver} - erl_version:#{erl_version})" <>
+        " - heartbeat:#{heartbeat}"
     )
 
     Logger.info(

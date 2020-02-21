@@ -31,23 +31,23 @@ use Mix.Config
 
 # tell logger to load a LoggerFileBackend processes
 config :logger,
-  backends: [{LoggerFileBackend, :error_log},
-             {LoggerFileBackend, :debug_log}]
+  backends: [{LoggerFileBackend, :error_log}, {LoggerFileBackend, :debug_log}]
 
 # configuration for the {LoggerFileBackend, :error_log} backend
 config :logger, :error_log,
   path: "/var/log/freeswitch_realtime/error.log",
   level: :warn,
   format: "$date $time $metadata[$level] $levelpad$message\n"
-  # metadata: [:file, :line]
+
+# metadata: [:file, :line]
 
 # configuration for the {LoggerFileBackend, :debug_log} backend
 config :logger, :debug_log,
   path: "/var/log/freeswitch_realtime/debug.log",
   level: :info,
   format: "$date $time $metadata[$level] $levelpad$message\n"
-  # metadata: [:file, :line]
 
+# metadata: [:file, :line]
 
 # config :logger,
 #   backends: [:console],
@@ -58,28 +58,28 @@ config :logger, :debug_log,
 
 config :fs_realtime,
   sqlite_db: "/dev/shm/core.db",
-  influxdatabase:  "newfiesdialer",
-  local_host: "LOCAL_IP"
+  influxdatabase: "newfiesdialer",
+  local_host: "LOCAL_IP",
+  heartbeat: 2000
 
 # InfluxDB configuration
 config :fs_realtime, FSRealtime.InConnection,
-  host:      "localhost",
+  host: "localhost",
   # http_opts: [ insecure: true, proxy: "http://company.proxy" ],
-  pool:      [ max_overflow: 0, size: 1 ],
-  port:      8086,
-  scheme:    "http",
-  writer:    Instream.Writer.Line
-
+  pool: [max_overflow: 0, size: 1],
+  port: 8086,
+  scheme: "http",
+  writer: Instream.Writer.Line
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
 
-if Mix.env == :test or Mix.env == :dev do
+if Mix.env() == :test or Mix.env() == :dev do
   config :mix_test_watch,
     tasks: [
       "test",
       "credo -a --strict",
-      "dialyzer",
+      "dialyzer"
     ]
 end
