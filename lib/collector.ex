@@ -6,7 +6,7 @@ defmodule Collector do
   Collector module is in charge of collecting and pushing of channels info
   """
 
-  @loop_interval 500
+  @loop_interval 2000
 
   def start_link(state, opts \\ []) do
     GenServer.start_link(__MODULE__, state, opts)
