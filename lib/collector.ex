@@ -83,7 +83,8 @@ defmodule Collector do
       # Logger.info("push_to_influxdb - aggr_channel:#{inspect(aggr_channel)}")
       PushInfluxDB.async_push_aggr_channel(aggr_channel)
     else
-      Logger.info("bypass push_to_influxdb...")
+      # Logger.info("bypass push_to_influxdb...")
+      :ok
     end
   end
 
