@@ -60,7 +60,8 @@ config :fs_realtime,
   sqlite_db: "/dev/shm/core.db",
   influxdatabase: "newfiesdialer",
   local_host: "LOCAL_IP",
-  heartbeat: 2000
+  heartbeat: 1000,
+  bypass_influx_freq: 5
 
 config :fs_realtime, ecto_repos: [FSRealtime.Repo]
 

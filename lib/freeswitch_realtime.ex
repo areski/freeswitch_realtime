@@ -39,11 +39,12 @@ defmodule FSRealtime do
     {_, _, ex_ver} = List.keyfind(:application.which_applications(), :elixir, 0)
     erl_version = :erlang.system_info(:otp_release)
     heartbeat = Application.fetch_env!(:fs_realtime, :heartbeat)
+    bypass_influx_freq = Application.fetch_env!(:fs_realtime, :bypass_influx_freq)
 
     Logger.error(
       "[starting] fs_realtime (app_version:#{app_version} - " <>
         "ex_ver:#{ex_ver} - erl_version:#{erl_version})" <>
-        " - heartbeat:#{heartbeat}"
+        " - heartbeat:#{heartbeat} - bypass_influx_freq:#{bypass_influx_freq}"
     )
 
     Logger.info(

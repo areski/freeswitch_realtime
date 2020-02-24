@@ -67,11 +67,24 @@ defmodule Collector do
   defp process_channels do
     with {:ok, aggr_channel} <- get_channels_aggr(),
          # :ok <- Logger.info("#{inspect aggr_channel}"),
-         :ok <- PushInfluxDB.async_push_aggr_channel(aggr_channel),
+         :ok <- push_to_influxdb(aggr_channel),
          # :ok <- Logger.info("after async_push_aggr_channel"),
          do: {:ok, PusherPG.async_update_campaign_rt(aggr_channel)}
 
     :ok
+  end
+
+  @doc false
+  defp push_to_influxdb(aggr_channel) do
+    bypass_influx_freq = Application.fetch_env!(:fs_realtime, :bypass_influx_freq)
+    randint = :rand.uniform(bypass_influx_freq)
+
+    if randint <= 1 do
+      # Logger.info("push_to_influxdb - aggr_channel:#{inspect(aggr_channel)}")
+      PushInfluxDB.async_push_aggr_channel(aggr_channel)
+    else
+      Logger.info("bypass push_to_influxdb...")
+    end
   end
 
   @doc false

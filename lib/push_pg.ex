@@ -102,7 +102,6 @@ defmodule PusherPG do
     {:noreply, state}
   end
 
-
   def terminate(_reason, state) do
     # Do Shutdown Stuff
     Logger.error(fn ->
